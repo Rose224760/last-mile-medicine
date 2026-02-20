@@ -1,0 +1,526 @@
+/* ── PharmacyList (shadcn) ── */
+.pharmacy-list {
+  background: transparent;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 0.25rem;
+}
+
+.list-header h2 {
+  color: hsl(var(--foreground));
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.emergency-badge {
+  background: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  animation: emergencyBadgePulse 2s infinite;
+}
+
+@keyframes emergencyBadgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ── Community Banner ── */
+.community-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: hsl(221 83% 96%);
+  border: 1px solid hsl(221 83% 53% / 0.3);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.community-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.community-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.community-text strong {
+  font-size: 0.875rem;
+  color: hsl(224 76% 48%);
+  font-weight: 600;
+}
+
+.community-text span {
+  font-size: 0.75rem;
+  color: hsl(224 76% 48%);
+  opacity: 0.8;
+}
+
+/* ── Emergency Notice ── */
+.emergency-notice {
+  background: hsl(0 93% 97%);
+  border: 1px solid hsl(0 84% 60% / 0.3);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.emergency-notice strong {
+  display: block;
+  color: hsl(0 72% 51%);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.emergency-notice p {
+  color: hsl(0 72% 51%);
+  font-size: 0.75rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.pharmacy-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Card ── */
+.pharmacy-card {
+  background: hsl(var(--card));
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  border: 1px solid hsl(var(--border));
+  transition: border-color 0.15s;
+}
+
+.pharmacy-card:hover {
+  border-color: hsl(var(--ring));
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.pharmacy-rank {
+  background: hsl(var(--primary));
+  color: white;
+  min-width: 28px;
+  height: 28px;
+  border-radius: calc(var(--radius) - 2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.card-title h3 {
+  margin: 0;
+  color: hsl(var(--foreground));
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.verified-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: hsl(142.1 76.2% 36.3%);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.625rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.card-badges {
+  display: flex;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+.status-badge {
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-badge.open {
+  background: hsl(143 85% 96%);
+  color: hsl(140 100% 27%);
+  border: 1px solid hsl(142 69% 58% / 0.3);
+}
+
+.status-badge.closed {
+  background: hsl(0 93% 97%);
+  color: hsl(0 72% 51%);
+  border: 1px solid hsl(0 84% 60% / 0.3);
+}
+
+.badge-24 {
+  background: hsl(221 83% 96%);
+  color: hsl(224 76% 48%);
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  border: 1px solid hsl(221 83% 53% / 0.3);
+}
+
+/* Emergency Mode: Highlight 24/7 stores */
+.emergency-badge + .pharmacy-cards .pharmacy-card:has(.badge-24) {
+  border-color: hsl(var(--ring));
+  background: hsl(221 100% 99%);
+}
+
+.emergency-badge + .pharmacy-cards .pharmacy-card:has(.badge-24) .badge-24 {
+  background: hsl(224 76% 48%);
+  color: white;
+  font-weight: 600;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ── Card Info ── */
+.card-info {
+  margin: 0.75rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.8125rem;
+}
+
+.info-icon {
+  font-size: 0.875rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.info-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.medicine-available {
+  background: hsl(143 85% 96%);
+  color: hsl(140 100% 27%);
+  padding: 0.5rem 0.75rem;
+  border-radius: calc(var(--radius) - 2px);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  margin-top: 0.5rem;
+  border: 1px solid hsl(142 69% 58% / 0.3);
+}
+
+/* ── Crowd Verification (Waze-style) ── */
+.verification-section {
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid hsl(var(--border));
+}
+
+.verification-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.verification-label {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+}
+
+.verification-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.verify-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.verify-btn:hover {
+  background: hsl(var(--accent));
+  border-color: hsl(var(--ring));
+}
+
+.verify-btn.found:hover {
+  background: hsl(143 85% 96%);
+  border-color: hsl(142 69% 58%);
+  color: hsl(140 100% 27%);
+}
+
+.verify-btn.out:hover {
+  background: hsl(0 93% 97%);
+  border-color: hsl(0 84% 60%);
+  color: hsl(0 72% 51%);
+}
+
+/* Verification Status Display */
+.verification-status {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid;
+  animation: verificationAppear 0.3s ease;
+}
+
+@keyframes verificationAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.verification-status.verified {
+  background: hsl(143 85% 96%);
+  border-color: hsl(142 69% 58% / 0.3);
+  color: hsl(140 100% 27%);
+}
+
+.verification-status.out-of-stock {
+  background: hsl(0 93% 97%);
+  border-color: hsl(0 84% 60% / 0.3);
+  color: hsl(0 72% 51%);
+}
+
+.verification-icon {
+  font-size: 1.125rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.verification-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+}
+
+.verification-info strong {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.verification-time {
+  font-size: 0.6875rem;
+  opacity: 0.8;
+  font-weight: 400;
+}
+
+/* ── Card Footer ── */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid hsl(var(--border));
+}
+
+.reliability {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.reliability span:first-child {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  font-size: 0.875rem;
+}
+
+.reliability-text {
+  font-size: 0.6875rem;
+  color: hsl(var(--muted-foreground));
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Action Buttons ── */
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.card-actions.emergency-actions {
+  flex: 1;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border-radius: calc(var(--radius) - 2px);
+  text-decoration: none;
+  transition: opacity 0.15s, background 0.15s, border-color 0.15s, transform 0.15s;
+  font-family: inherit;
+}
+
+.action-btn.emergency-call {
+  flex: 1;
+  height: 2.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  background: hsl(var(--destructive));
+  color: white;
+  animation: emergencyPulse 2s infinite;
+}
+
+.action-btn.emergency-call:hover {
+  transform: scale(1.02);
+  opacity: 1;
+}
+
+@keyframes emergencyPulse {
+  0%, 100% { box-shadow: 0 0 0 0 hsla(var(--destructive) / 0.4); }
+  50% { box-shadow: 0 0 0 4px hsla(var(--destructive) / 0); }
+}
+
+.action-btn.primary {
+  background: hsl(var(--primary));
+  color: white;
+}
+
+.action-btn.primary:hover {
+  opacity: 0.9;
+}
+
+.action-btn.secondary {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--input));
+}
+
+.action-btn.secondary:hover {
+  background: hsl(var(--accent));
+  border-color: hsl(var(--ring));
+}
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: hsl(var(--card));
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  color: hsl(var(--foreground));
+  margin-bottom: 0.375rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.empty-state p {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+}
+
+.empty-state-tip {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: hsl(221 83% 96%);
+  border: 1px solid hsl(221 83% 53% / 0.3);
+  border-radius: var(--radius);
+  font-size: 0.8125rem;
+  color: hsl(224 76% 48%);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .card-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+  .card-actions {
+    width: 100%;
+  }
+  .action-btn {
+    flex: 1;
+  }
+}

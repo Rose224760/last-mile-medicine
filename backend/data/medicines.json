@@ -1,0 +1,145 @@
+[
+  {
+    "id": "med001",
+    "name": "Paracetamol",
+    "genericName": "Paracetamol",
+    "brandNames": ["Dolo-650", "Crocin", "Calpol"],
+    "category": "Pain Relief",
+    "commonUses": ["Fever", "Headache", "Body pain"],
+    "avgPrice": 30,
+    "requiresPrescription": false
+  },
+  {
+    "id": "med002",
+    "name": "Dolo-650",
+    "genericName": "Paracetamol",
+    "brandNames": ["Dolo-650"],
+    "category": "Pain Relief",
+    "commonUses": ["Fever", "Headache", "Body pain"],
+    "avgPrice": 35,
+    "requiresPrescription": false,
+    "genericAlternatives": ["Paracetamol", "Crocin"]
+  },
+  {
+    "id": "med003",
+    "name": "Crocin",
+    "genericName": "Paracetamol",
+    "brandNames": ["Crocin"],
+    "category": "Pain Relief",
+    "commonUses": ["Fever", "Cold", "Headache"],
+    "avgPrice": 32,
+    "requiresPrescription": false,
+    "genericAlternatives": ["Paracetamol", "Dolo-650"]
+  },
+  {
+    "id": "med004",
+    "name": "Amoxicillin",
+    "genericName": "Amoxicillin",
+    "brandNames": ["Amoxil", "Novamox"],
+    "category": "Antibiotic",
+    "commonUses": ["Bacterial infections", "Throat infection"],
+    "avgPrice": 120,
+    "requiresPrescription": true
+  },
+  {
+    "id": "med005",
+    "name": "Azithromycin",
+    "genericName": "Azithromycin",
+    "brandNames": ["Azithral", "Zithromax"],
+    "category": "Antibiotic",
+    "commonUses": ["Respiratory infections", "Skin infections"],
+    "avgPrice": 150,
+    "requiresPrescription": true
+  },
+  {
+    "id": "med006",
+    "name": "Insulin",
+    "genericName": "Insulin",
+    "brandNames": ["Lantus", "Humalog", "Novolin"],
+    "category": "Diabetes",
+    "commonUses": ["Diabetes management"],
+    "avgPrice": 800,
+    "requiresPrescription": true,
+    "isEmergencyMedicine": true
+  },
+  {
+    "id": "med007",
+    "name": "Metformin",
+    "genericName": "Metformin",
+    "brandNames": ["Glucophage", "Glycomet"],
+    "category": "Diabetes",
+    "commonUses": ["Type 2 Diabetes"],
+    "avgPrice": 45,
+    "requiresPrescription": true
+  },
+  {
+    "id": "med008",
+    "name": "Aspirin",
+    "genericName": "Acetylsalicylic Acid",
+    "brandNames": ["Disprin", "Ecosprin"],
+    "category": "Blood Thinner",
+    "commonUses": ["Heart health", "Pain relief"],
+    "avgPrice": 25,
+    "requiresPrescription": false
+  },
+  {
+    "id": "med009",
+    "name": "Cetirizine",
+    "genericName": "Cetirizine",
+    "brandNames": ["Zyrtec", "Alerid"],
+    "category": "Antihistamine",
+    "commonUses": ["Allergies", "Skin rashes"],
+    "avgPrice": 40,
+    "requiresPrescription": false
+  },
+  {
+    "id": "med010",
+    "name": "Omeprazole",
+    "genericName": "Omeprazole",
+    "brandNames": ["Prilosec", "Omez"],
+    "category": "Antacid",
+    "commonUses": ["Acidity", "Gastric issues"],
+    "avgPrice": 55,
+    "requiresPrescription": false
+  },
+  {
+    "id": "med011",
+    "name": "Vitamin D",
+    "genericName": "Cholecalciferol",
+    "brandNames": ["D-Rise", "Calcirol"],
+    "category": "Vitamin",
+    "commonUses": ["Bone health", "Immunity"],
+    "avgPrice": 60,
+    "requiresPrescription": false
+  },
+  {
+    "id": "med012",
+    "name": "Vitamin C",
+    "genericName": "Ascorbic Acid",
+    "brandNames": ["Celin", "Limcee"],
+    "category": "Vitamin",
+    "commonUses": ["Immunity", "Cold prevention"],
+    "avgPrice": 35,
+    "requiresPrescription": false
+  },
+  {
+    "id": "med013",
+    "name": "Ibuprofen",
+    "genericName": "Ibuprofen",
+    "brandNames": ["Brufen", "Advil"],
+    "category": "Pain Relief",
+    "commonUses": ["Pain", "Inflammation"],
+    "avgPrice": 45,
+    "requiresPrescription": false
+  },
+  {
+    "id": "med014",
+    "name": "Atorvastatin",
+    "genericName": "Atorvastatin",
+    "brandNames": ["Lipitor", "Atorva"],
+    "category": "Cholesterol",
+    "commonUses": ["High cholesterol"],
+    "avgPrice": 90,
+    "requiresPrescription": true
+  }
+]

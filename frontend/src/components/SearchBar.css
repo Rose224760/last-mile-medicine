@@ -1,0 +1,161 @@
+/* ── SearchBar (shadcn) ── */
+.search-bar-container {
+  position: relative;
+  flex: 1;
+}
+
+.search-form {
+  position: relative;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  font-size: 1rem;
+  pointer-events: none;
+  color: hsl(var(--muted-foreground));
+  z-index: 1;
+}
+
+.search-input {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 2.5rem;
+  font-size: 0.875rem;
+  border: 1px solid hsl(var(--input));
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: inherit;
+}
+
+.search-input::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+.search-input:focus {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 2px hsla(var(--ring) / 0.2);
+}
+
+.clear-btn {
+  position: absolute;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  transition: color 0.15s, background 0.15s;
+  z-index: 1;
+}
+
+.clear-btn:hover {
+  background: hsl(var(--muted));
+  color: hsl(var(--foreground));
+}
+
+/* ── Suggestions Dropdown ── */
+.suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 360px;
+  overflow-y: auto;
+  animation: slideDown 0.15s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.suggestions-dropdown::-webkit-scrollbar {
+  width: 4px;
+}
+
+.suggestions-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.suggestions-dropdown::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 2px;
+}
+
+.suggestion-item {
+  padding: 0.625rem 0.75rem;
+  cursor: pointer;
+  border-bottom: 1px solid hsl(var(--border));
+  transition: background 0.1s;
+  font-size: 0.875rem;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background: hsl(var(--accent));
+}
+
+.suggestion-main {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.medicine-name {
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  font-size: 0.875rem;
+}
+
+.generic-name {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.8125rem;
+}
+
+.suggestion-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.category {
+  color: hsl(var(--muted-foreground));
+  background: hsl(var(--muted));
+  padding: 0.125rem 0.5rem;
+  border-radius: calc(var(--radius) - 2px);
+  font-weight: 500;
+  font-size: 0.6875rem;
+}
+
+.price {
+  color: hsl(142.1 76.2% 36.3%);
+  font-weight: 600;
+  font-size: 0.8125rem;
+}
