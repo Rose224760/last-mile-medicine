@@ -43,7 +43,8 @@ People waste **30–60 minutes** during emergencies searching multiple pharmacie
 
 | Home & Search | Emergency Map | Pharmacy Dashboard |
 |:---:|:---:|:---:|
-| ![Home](docs/screenshots/home-search.png) | ![Emergency](docs/screenshots/emergency-map.png) | ![Dashboard](docs/screenshots/pharmacy-dashboard.png) |
+| ![Home](<img width="1836" height="888" alt="Screenshot 2026-02-21 083115" src="https://github.com/user-attachments/assets/25255111-5565-4228-b9db-30537fe2a7d0" />
+ | ![Emergency](docs/screenshots/emergency-map.png) | ![Dashboard](docs/screenshots/pharmacy-dashboard.png) |
 
 | Medicine Safety Check | Drug Interaction | Elder Mode |
 |:---:|:---:|:---:|
@@ -51,12 +52,6 @@ People waste **30–60 minutes** during emergencies searching multiple pharmacie
 
 ---
 
-## 🎬 Demo Video
-
-> 📹 **[Watch the demo →](https://your-demo-video-link-here)**  
-> *(Replace with your YouTube / Loom / Google Drive link)*
-
----
 
 ## 🏛️ Architecture Diagram
 
