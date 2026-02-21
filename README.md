@@ -53,6 +53,9 @@ People waste **30–60 minutes** during emergencies searching multiple pharmacie
 ) |  |
 
 ---
+Demo Video
+
+ | https://drive.google.com/drive/folders/1UFDwuQlsIGk2DpgavTuQVHLzYvkfA1Tw?usp=sharing |
 
 
 ## 🏛️ Architecture Diagram
