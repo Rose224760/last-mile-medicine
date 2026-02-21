@@ -3,143 +3,541 @@
     "id": "med001",
     "name": "Paracetamol",
     "genericName": "Paracetamol",
-    "brandNames": ["Dolo-650", "Crocin", "Calpol"],
+    "brandNames": [
+      "Dolo-650",
+      "Crocin",
+      "Calpol"
+    ],
     "category": "Pain Relief",
-    "commonUses": ["Fever", "Headache", "Body pain"],
+    "commonUses": [
+      "Fever",
+      "Headache",
+      "Body pain"
+    ],
     "avgPrice": 30,
-    "requiresPrescription": false
+    "requiresPrescription": false,
+    "composition": [
+      "Paracetamol (Acetaminophen)"
+    ],
+    "drugClass": "Analgesic / Antipyretic",
+    "allergyTags": [],
+    "ageRestrictions": {
+      "child": "safe",
+      "adult": "safe",
+      "elderly": "safe"
+    },
+    "pregnancySafety": "safe",
+    "conditionWarnings": {
+      "liver_disease": "avoid",
+      "kidney_disease": "caution"
+    },
+    "sideEffects": [
+      "Rare at normal doses",
+      "Liver damage at high doses"
+    ],
+    "safeAlternatives": []
   },
   {
     "id": "med002",
     "name": "Dolo-650",
     "genericName": "Paracetamol",
-    "brandNames": ["Dolo-650"],
+    "brandNames": [
+      "Dolo-650"
+    ],
     "category": "Pain Relief",
-    "commonUses": ["Fever", "Headache", "Body pain"],
+    "commonUses": [
+      "Fever",
+      "Headache",
+      "Body pain"
+    ],
     "avgPrice": 35,
     "requiresPrescription": false,
-    "genericAlternatives": ["Paracetamol", "Crocin"]
+    "genericAlternatives": [
+      "Paracetamol",
+      "Crocin"
+    ],
+    "composition": [
+      "Paracetamol 650mg"
+    ],
+    "drugClass": "Analgesic / Antipyretic",
+    "allergyTags": [],
+    "ageRestrictions": {
+      "child": "caution",
+      "adult": "safe",
+      "elderly": "safe"
+    },
+    "pregnancySafety": "safe",
+    "conditionWarnings": {
+      "liver_disease": "avoid",
+      "kidney_disease": "caution"
+    },
+    "sideEffects": [
+      "Rare at normal doses",
+      "Liver damage at high doses"
+    ],
+    "safeAlternatives": [
+      "Paracetamol 500mg"
+    ]
   },
   {
     "id": "med003",
     "name": "Crocin",
     "genericName": "Paracetamol",
-    "brandNames": ["Crocin"],
+    "brandNames": [
+      "Crocin"
+    ],
     "category": "Pain Relief",
-    "commonUses": ["Fever", "Cold", "Headache"],
+    "commonUses": [
+      "Fever",
+      "Cold",
+      "Headache"
+    ],
     "avgPrice": 32,
     "requiresPrescription": false,
-    "genericAlternatives": ["Paracetamol", "Dolo-650"]
+    "genericAlternatives": [
+      "Paracetamol",
+      "Dolo-650"
+    ],
+    "composition": [
+      "Paracetamol (Acetaminophen)"
+    ],
+    "drugClass": "Analgesic / Antipyretic",
+    "allergyTags": [],
+    "ageRestrictions": {
+      "child": "safe",
+      "adult": "safe",
+      "elderly": "safe"
+    },
+    "pregnancySafety": "safe",
+    "conditionWarnings": {
+      "liver_disease": "avoid",
+      "kidney_disease": "caution"
+    },
+    "sideEffects": [
+      "Rare at normal doses"
+    ],
+    "safeAlternatives": []
   },
   {
     "id": "med004",
     "name": "Amoxicillin",
     "genericName": "Amoxicillin",
-    "brandNames": ["Amoxil", "Novamox"],
+    "brandNames": [
+      "Amoxil",
+      "Novamox"
+    ],
     "category": "Antibiotic",
-    "commonUses": ["Bacterial infections", "Throat infection"],
+    "commonUses": [
+      "Bacterial infections",
+      "Throat infection"
+    ],
     "avgPrice": 120,
-    "requiresPrescription": true
+    "requiresPrescription": true,
+    "composition": [
+      "Amoxicillin Trihydrate"
+    ],
+    "drugClass": "Penicillin Antibiotic",
+    "allergyTags": [
+      "penicillin",
+      "beta_lactam"
+    ],
+    "ageRestrictions": {
+      "child": "safe",
+      "adult": "safe",
+      "elderly": "safe"
+    },
+    "pregnancySafety": "caution",
+    "conditionWarnings": {
+      "kidney_disease": "caution"
+    },
+    "sideEffects": [
+      "Diarrhea",
+      "Nausea",
+      "Allergic rash",
+      "Anaphylaxis (rare)"
+    ],
+    "safeAlternatives": [
+      "Azithromycin"
+    ]
   },
   {
     "id": "med005",
     "name": "Azithromycin",
     "genericName": "Azithromycin",
-    "brandNames": ["Azithral", "Zithromax"],
+    "brandNames": [
+      "Azithral",
+      "Zithromax"
+    ],
     "category": "Antibiotic",
-    "commonUses": ["Respiratory infections", "Skin infections"],
+    "commonUses": [
+      "Respiratory infections",
+      "Skin infections"
+    ],
     "avgPrice": 150,
-    "requiresPrescription": true
+    "requiresPrescription": true,
+    "composition": [
+      "Azithromycin Dihydrate"
+    ],
+    "drugClass": "Macrolide Antibiotic",
+    "allergyTags": [
+      "macrolide"
+    ],
+    "ageRestrictions": {
+      "child": "caution",
+      "adult": "safe",
+      "elderly": "caution"
+    },
+    "pregnancySafety": "caution",
+    "conditionWarnings": {
+      "liver_disease": "caution",
+      "heart_disease": "caution"
+    },
+    "sideEffects": [
+      "Nausea",
+      "Diarrhea",
+      "Abdominal pain"
+    ],
+    "safeAlternatives": []
   },
   {
     "id": "med006",
     "name": "Insulin",
     "genericName": "Insulin",
-    "brandNames": ["Lantus", "Humalog", "Novolin"],
+    "brandNames": [
+      "Lantus",
+      "Humalog",
+      "Novolin"
+    ],
     "category": "Diabetes",
-    "commonUses": ["Diabetes management"],
+    "commonUses": [
+      "Diabetes management"
+    ],
     "avgPrice": 800,
     "requiresPrescription": true,
-    "isEmergencyMedicine": true
+    "isEmergencyMedicine": true,
+    "composition": [
+      "Recombinant Human Insulin"
+    ],
+    "drugClass": "Hormone",
+    "allergyTags": [],
+    "ageRestrictions": {
+      "child": "safe",
+      "adult": "safe",
+      "elderly": "safe"
+    },
+    "pregnancySafety": "safe",
+    "conditionWarnings": {
+      "kidney_disease": "caution"
+    },
+    "sideEffects": [
+      "Hypoglycemia",
+      "Injection site reaction",
+      "Weight gain"
+    ],
+    "safeAlternatives": []
   },
   {
     "id": "med007",
     "name": "Metformin",
     "genericName": "Metformin",
-    "brandNames": ["Glucophage", "Glycomet"],
+    "brandNames": [
+      "Glucophage",
+      "Glycomet"
+    ],
     "category": "Diabetes",
-    "commonUses": ["Type 2 Diabetes"],
+    "commonUses": [
+      "Type 2 Diabetes"
+    ],
     "avgPrice": 45,
-    "requiresPrescription": true
+    "requiresPrescription": true,
+    "composition": [
+      "Metformin Hydrochloride"
+    ],
+    "drugClass": "Biguanide",
+    "allergyTags": [],
+    "ageRestrictions": {
+      "child": "avoid",
+      "adult": "safe",
+      "elderly": "caution"
+    },
+    "pregnancySafety": "caution",
+    "conditionWarnings": {
+      "kidney_disease": "avoid",
+      "liver_disease": "avoid",
+      "heart_disease": "caution"
+    },
+    "sideEffects": [
+      "Nausea",
+      "Diarrhea",
+      "Lactic acidosis (rare)"
+    ],
+    "safeAlternatives": []
   },
   {
     "id": "med008",
     "name": "Aspirin",
     "genericName": "Acetylsalicylic Acid",
-    "brandNames": ["Disprin", "Ecosprin"],
+    "brandNames": [
+      "Disprin",
+      "Ecosprin"
+    ],
     "category": "Blood Thinner",
-    "commonUses": ["Heart health", "Pain relief"],
+    "commonUses": [
+      "Heart health",
+      "Pain relief"
+    ],
     "avgPrice": 25,
-    "requiresPrescription": false
+    "requiresPrescription": false,
+    "composition": [
+      "Acetylsalicylic Acid"
+    ],
+    "drugClass": "NSAID / Antiplatelet",
+    "allergyTags": [
+      "nsaid",
+      "aspirin",
+      "salicylate"
+    ],
+    "ageRestrictions": {
+      "child": "avoid",
+      "adult": "safe",
+      "elderly": "caution"
+    },
+    "pregnancySafety": "avoid",
+    "conditionWarnings": {
+      "asthma": "avoid",
+      "bleeding_disorder": "avoid",
+      "kidney_disease": "caution",
+      "liver_disease": "caution"
+    },
+    "sideEffects": [
+      "Gastric bleeding",
+      "Stomach ulcers",
+      "Tinnitus"
+    ],
+    "safeAlternatives": [
+      "Paracetamol"
+    ]
   },
   {
     "id": "med009",
     "name": "Cetirizine",
     "genericName": "Cetirizine",
-    "brandNames": ["Zyrtec", "Alerid"],
+    "brandNames": [
+      "Zyrtec",
+      "Alerid"
+    ],
     "category": "Antihistamine",
-    "commonUses": ["Allergies", "Skin rashes"],
+    "commonUses": [
+      "Allergies",
+      "Skin rashes"
+    ],
     "avgPrice": 40,
-    "requiresPrescription": false
+    "requiresPrescription": false,
+    "composition": [
+      "Cetirizine Hydrochloride"
+    ],
+    "drugClass": "Second-generation Antihistamine",
+    "allergyTags": [],
+    "ageRestrictions": {
+      "child": "safe",
+      "adult": "safe",
+      "elderly": "caution"
+    },
+    "pregnancySafety": "caution",
+    "conditionWarnings": {
+      "kidney_disease": "caution"
+    },
+    "sideEffects": [
+      "Drowsiness",
+      "Dry mouth",
+      "Fatigue"
+    ],
+    "safeAlternatives": []
   },
   {
     "id": "med010",
     "name": "Omeprazole",
     "genericName": "Omeprazole",
-    "brandNames": ["Prilosec", "Omez"],
+    "brandNames": [
+      "Prilosec",
+      "Omez"
+    ],
     "category": "Antacid",
-    "commonUses": ["Acidity", "Gastric issues"],
+    "commonUses": [
+      "Acidity",
+      "Gastric issues"
+    ],
     "avgPrice": 55,
-    "requiresPrescription": false
+    "requiresPrescription": false,
+    "composition": [
+      "Omeprazole Magnesium"
+    ],
+    "drugClass": "Proton Pump Inhibitor (PPI)",
+    "allergyTags": [
+      "ppi"
+    ],
+    "ageRestrictions": {
+      "child": "caution",
+      "adult": "safe",
+      "elderly": "safe"
+    },
+    "pregnancySafety": "caution",
+    "conditionWarnings": {
+      "liver_disease": "caution"
+    },
+    "sideEffects": [
+      "Headache",
+      "Nausea",
+      "Vitamin B12 deficiency (long-term)"
+    ],
+    "safeAlternatives": []
   },
   {
     "id": "med011",
     "name": "Vitamin D",
     "genericName": "Cholecalciferol",
-    "brandNames": ["D-Rise", "Calcirol"],
+    "brandNames": [
+      "D-Rise",
+      "Calcirol"
+    ],
     "category": "Vitamin",
-    "commonUses": ["Bone health", "Immunity"],
+    "commonUses": [
+      "Bone health",
+      "Immunity"
+    ],
     "avgPrice": 60,
-    "requiresPrescription": false
+    "requiresPrescription": false,
+    "composition": [
+      "Cholecalciferol (Vitamin D3)"
+    ],
+    "drugClass": "Vitamin Supplement",
+    "allergyTags": [],
+    "ageRestrictions": {
+      "child": "safe",
+      "adult": "safe",
+      "elderly": "safe"
+    },
+    "pregnancySafety": "safe",
+    "conditionWarnings": {},
+    "sideEffects": [
+      "Nausea at very high doses",
+      "Hypercalcemia (rare)"
+    ],
+    "safeAlternatives": []
   },
   {
     "id": "med012",
     "name": "Vitamin C",
     "genericName": "Ascorbic Acid",
-    "brandNames": ["Celin", "Limcee"],
+    "brandNames": [
+      "Celin",
+      "Limcee"
+    ],
     "category": "Vitamin",
-    "commonUses": ["Immunity", "Cold prevention"],
+    "commonUses": [
+      "Immunity",
+      "Cold prevention"
+    ],
     "avgPrice": 35,
-    "requiresPrescription": false
+    "requiresPrescription": false,
+    "composition": [
+      "Ascorbic Acid"
+    ],
+    "drugClass": "Vitamin Supplement",
+    "allergyTags": [],
+    "ageRestrictions": {
+      "child": "safe",
+      "adult": "safe",
+      "elderly": "safe"
+    },
+    "pregnancySafety": "safe",
+    "conditionWarnings": {
+      "kidney_disease": "caution"
+    },
+    "sideEffects": [
+      "Stomach upset at high doses"
+    ],
+    "safeAlternatives": []
   },
   {
     "id": "med013",
     "name": "Ibuprofen",
     "genericName": "Ibuprofen",
-    "brandNames": ["Brufen", "Advil"],
+    "brandNames": [
+      "Brufen",
+      "Advil"
+    ],
     "category": "Pain Relief",
-    "commonUses": ["Pain", "Inflammation"],
+    "commonUses": [
+      "Pain",
+      "Inflammation"
+    ],
     "avgPrice": 45,
-    "requiresPrescription": false
+    "requiresPrescription": false,
+    "composition": [
+      "Ibuprofen"
+    ],
+    "drugClass": "NSAID",
+    "allergyTags": [
+      "nsaid"
+    ],
+    "ageRestrictions": {
+      "child": "caution",
+      "adult": "safe",
+      "elderly": "caution"
+    },
+    "pregnancySafety": "avoid",
+    "conditionWarnings": {
+      "asthma": "caution",
+      "kidney_disease": "avoid",
+      "heart_disease": "caution",
+      "bleeding_disorder": "avoid",
+      "hypertension": "caution"
+    },
+    "sideEffects": [
+      "Stomach upset",
+      "Gastric bleeding",
+      "Kidney issues"
+    ],
+    "safeAlternatives": [
+      "Paracetamol"
+    ]
   },
   {
     "id": "med014",
     "name": "Atorvastatin",
     "genericName": "Atorvastatin",
-    "brandNames": ["Lipitor", "Atorva"],
+    "brandNames": [
+      "Lipitor",
+      "Atorva"
+    ],
     "category": "Cholesterol",
-    "commonUses": ["High cholesterol"],
+    "commonUses": [
+      "High cholesterol"
+    ],
     "avgPrice": 90,
-    "requiresPrescription": true
+    "requiresPrescription": true,
+    "composition": [
+      "Atorvastatin Calcium"
+    ],
+    "drugClass": "Statin",
+    "allergyTags": [
+      "statin"
+    ],
+    "ageRestrictions": {
+      "child": "avoid",
+      "adult": "safe",
+      "elderly": "safe"
+    },
+    "pregnancySafety": "avoid",
+    "conditionWarnings": {
+      "liver_disease": "avoid"
+    },
+    "sideEffects": [
+      "Muscle pain",
+      "Liver enzyme elevation",
+      "Digestive issues"
+    ],
+    "safeAlternatives": []
   }
 ]

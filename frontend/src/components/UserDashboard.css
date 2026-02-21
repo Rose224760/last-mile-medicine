@@ -1,0 +1,232 @@
+.user-dashboard {
+  margin-bottom: 1rem;
+}
+
+/* ── Quick Actions ── */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.quick-action {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  text-align: left;
+}
+
+.quick-action:hover {
+  border-color: hsl(var(--ring));
+  background: hsl(var(--muted));
+}
+
+.quick-action .qa-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.875rem;
+}
+
+.quick-action .qa-icon.blue { background: hsl(221 83% 53% / 0.1); color: hsl(var(--primary)); }
+.quick-action .qa-icon.green { background: hsl(142 71% 45% / 0.1); color: hsl(var(--success)); }
+.quick-action .qa-icon.red { background: hsl(0 84% 60% / 0.1); color: hsl(var(--destructive)); }
+.quick-action .qa-icon.amber { background: hsl(38 92% 50% / 0.1); color: hsl(38, 92%, 50%); }
+
+.quick-action .qa-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.quick-action .qa-desc {
+  font-size: 0.625rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.125rem;
+}
+
+/* ── Dashboard Cards Row ── */
+.dash-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.dash-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.dash-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.dash-card-head h4 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.dash-card-head .clear-link {
+  font-size: 0.6875rem;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  text-decoration: underline;
+}
+
+.dash-card-head .clear-link:hover {
+  color: hsl(var(--destructive));
+}
+
+.dash-card-body {
+  padding: 0.5rem 0.75rem;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.dash-card-body::-webkit-scrollbar {
+  width: 3px;
+}
+
+.dash-card-body::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 2px;
+}
+
+/* ── History / Saved Items ── */
+.history-item,
+.saved-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.375rem 0;
+  border-bottom: 1px solid hsl(var(--border));
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.history-item:last-child,
+.saved-item:last-child {
+  border-bottom: none;
+}
+
+.history-item:hover,
+.saved-item:hover {
+  background: hsl(var(--muted));
+  margin: 0 -0.75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.history-item .hi-name,
+.saved-item .si-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+}
+
+.history-item .hi-time {
+  font-size: 0.625rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.saved-item .si-remove {
+  background: none;
+  border: none;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  line-height: 1;
+}
+
+.saved-item .si-remove:hover {
+  color: hsl(var(--destructive));
+}
+
+.empty-dash {
+  text-align: center;
+  padding: 1rem 0.5rem;
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+/* ── Role Badge ── */
+.role-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: hsl(221 83% 53% / 0.1);
+  color: hsl(var(--primary));
+}
+
+/* ── Elder-mode overrides ── */
+.elder-mode .quick-action {
+  padding: 1rem;
+}
+
+.elder-mode .qa-text {
+  font-size: 0.9375rem;
+}
+
+.elder-mode .qa-desc {
+  font-size: 0.8125rem;
+}
+
+.elder-mode .qa-icon {
+  width: 40px;
+  height: 40px;
+  font-size: 1.125rem;
+}
+
+.elder-mode .dash-card-head h4 {
+  font-size: 0.875rem;
+}
+
+.elder-mode .history-item .hi-name,
+.elder-mode .saved-item .si-name {
+  font-size: 1rem;
+}
+
+.elder-mode .history-item .hi-time {
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 640px) {
+  .dash-row {
+    grid-template-columns: 1fr;
+  }
+  .quick-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

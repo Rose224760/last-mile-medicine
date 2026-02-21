@@ -15,7 +15,7 @@ const getRelativeTime = (timestamp) => {
   return `${days} day${days !== 1 ? 's' : ''} ago`;
 };
 
-function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
+function PharmacyList({ pharmacies, emergencyMode, selectedMedicine, elderMode }) {
   const [verifications, setVerifications] = useState({});
 
   // Load verifications from localStorage on mount
@@ -55,7 +55,7 @@ function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
   if (pharmacies.length === 0) {
     return (
       <div className="empty-state">
-        <p className="empty-icon">🔍</p>
+        <p className="empty-icon">—</p>
         <h3>No pharmacies found</h3>
         <p>Try searching for a medicine or adjusting your filters</p>
         {selectedMedicine && Object.keys(verifications).length > 0 && (
@@ -79,7 +79,7 @@ function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
       {/* Community Stats Banner */}
       {selectedMedicine && Object.keys(verifications).length > 0 && (
         <div className="community-banner">
-          <span className="community-icon">🌐</span>
+          <span className="community-icon">•</span>
           <div className="community-text">
             <strong>Community-Verified Stock</strong>
             <span>Real-time updates from users like you</span>
@@ -89,8 +89,8 @@ function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
       
       {emergencyMode && pharmacies.length > 0 && (
         <div className="emergency-notice">
-          <strong>🚨 Emergency Mode Active</strong>
-          <p>Showing only open pharmacies • 24/7 stores highlighted • Tap to call instantly</p>
+          <strong>Emergency Mode Active</strong>
+          <p>Showing only open pharmacies • 24/7 stores highlighted</p>
         </div>
       )}
 
@@ -117,7 +117,7 @@ function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
                 </div>
                 <div className="card-badges">
                   <span className={`status-badge ${pharmacy.isOpen ? 'open' : 'closed'}`}>
-                    {pharmacy.isOpen ? '🟢 Open' : '🔴 Closed'}
+                    {pharmacy.isOpen ? 'Open' : 'Closed'}
                   </span>
                   {pharmacy.is24Hours && (
                     <span className="badge-24">24/7</span>
@@ -127,36 +127,32 @@ function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
 
               <div className="card-info">
                 <div className="info-row">
-                  <span className="info-icon">📍</span>
                   <span className="info-text">{pharmacy.address}</span>
                 </div>
                 
                 <div className="info-row">
-                  <span className="info-icon">🚶</span>
                   <span className="info-text">
-                    {pharmacy.distance} km away · ~{Math.ceil(pharmacy.distance * 15)} min
+                    {pharmacy.distance} km · ~{Math.ceil(pharmacy.distance * 15)} min
                   </span>
                 </div>
 
                 <div className="info-row">
-                  <span className="info-icon">⏰</span>
                   <span className="info-text">
                     {pharmacy.is24Hours 
-                      ? 'Open 24 Hours' 
-                      : `${pharmacy.openTime} - ${pharmacy.closeTime}`}
+                      ? '24h' 
+                      : `${pharmacy.openTime}–${pharmacy.closeTime}`}
                   </span>
                 </div>
 
                 {pharmacy.hasDelivery && (
                   <div className="info-row">
-                    <span className="info-icon">🚚</span>
-                    <span className="info-text">Delivery Available</span>
+                    <span className="info-text">Delivery available</span>
                   </div>
                 )}
 
                 {pharmacy.hasMedicine && selectedMedicine && (
                   <div className="medicine-available">
-                    <span>✅ Likely has {selectedMedicine.name}</span>
+                    <span>Likely has {selectedMedicine.name}</span>
                   </div>
                 )}
               </div>
@@ -167,7 +163,7 @@ function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
                   {verification ? (
                     <div className={`verification-status ${verification.found ? 'verified' : 'out-of-stock'}`}>
                       <span className="verification-icon">
-                        {verification.found ? '✔️' : '❌'}
+                        {verification.found ? '✓' : '✗'}
                       </span>
                       <div className="verification-info">
                         <strong>
@@ -178,19 +174,19 @@ function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
                     </div>
                   ) : (
                     <div className="verification-prompt">
-                      <span className="verification-label">Help the community:</span>
+                      <span className="verification-label">{elderMode ? '👥 Help others:' : 'Help the community:'}</span>
                       <div className="verification-buttons">
                         <button
                           className="verify-btn found"
                           onClick={() => handleVerify(pharmacy.id, selectedMedicine.name, true)}
                         >
-                          ✔️ Found here
+                          ✓ {elderMode ? 'Yes' : 'Found'}
                         </button>
                         <button
                           className="verify-btn out"
                           onClick={() => handleVerify(pharmacy.id, selectedMedicine.name, false)}
                         >
-                          ❌ Out of stock
+                          ✗ {elderMode ? 'No' : 'Out'}
                         </button>
                       </div>
                     </div>
@@ -201,7 +197,7 @@ function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
               <div className="card-footer">
               {!emergencyMode && (
                 <div className="reliability">
-                  <span>⭐ {pharmacy.reliabilityScore}/5</span>
+                  <span>{pharmacy.reliabilityScore}/5</span>
                   <span className="reliability-text">Reliability Score</span>
                 </div>
               )}
@@ -211,8 +207,30 @@ function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
                   href={`tel:${pharmacy.phone}`} 
                   className={`action-btn primary ${emergencyMode ? 'emergency-call' : ''}`}
                 >
-                  {emergencyMode ? '🆘 Call Now' : '📞 Call'}
+                  {emergencyMode ? '📞 Call Now' : (elderMode ? '📞 Call' : 'Call')}
                 </a>
+                {!emergencyMode && selectedMedicine && (
+                  <a
+                    href={`https://wa.me/${pharmacy.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                      `Hi ${pharmacy.name},\n\nI'm looking for *${selectedMedicine.name}*. Do you have it in stock?\n\nSent via Last Mile Medicine`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="action-btn whatsapp-btn"
+                  >
+                    {elderMode ? '💬 WhatsApp' : 'WhatsApp'}
+                  </a>
+                )}
+                {!emergencyMode && selectedMedicine && (
+                  <a
+                    href={`sms:${pharmacy.phone}?body=${encodeURIComponent(
+                      `Hi ${pharmacy.name}, is ${selectedMedicine.name} available? - via Last Mile Medicine`
+                    )}`}
+                    className="action-btn sms-btn"
+                  >
+                    {elderMode ? '✉ SMS' : 'SMS'}
+                  </a>
+                )}
                 {!emergencyMode && (
                   <a 
                     href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.latitude},${pharmacy.longitude}`}
@@ -220,7 +238,7 @@ function PharmacyList({ pharmacies, emergencyMode, selectedMedicine }) {
                     rel="noopener noreferrer"
                     className="action-btn secondary"
                   >
-                    🗺️ Directions
+                    {elderMode ? '🗺️ Directions' : 'Directions'}
                   </a>
                 )}
               </div>

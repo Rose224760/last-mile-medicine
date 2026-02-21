@@ -1,8 +1,33 @@
+/**
+ * Pharmacies Route — /api/pharmacies
+ * 
+ * Handles pharmacy discovery, nearby search (with Haversine distance),
+ * real-time open/closed status, stock management (toggle/update),
+ * and pharmacy detail updates for the dashboard.
+ */
+
 const express = require('express');
 const router = express.Router();
-const pharmaciesData = require('../data/pharmacies.json');
+const fs = require('fs');
+const path = require('path');
 
-// Helper function to check if pharmacy is currently open
+// Load pharmacy data from JSON flat-file (MVP storage layer)
+const dataPath = path.join(__dirname, '..', 'data', 'pharmacies.json');
+let pharmaciesData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+/**
+ * Persist in-memory pharmacy data back to the JSON file.
+ * Called after every write operation (stock update, detail change, etc.).
+ */
+function persist() {
+  fs.writeFileSync(dataPath, JSON.stringify(pharmaciesData, null, 2), 'utf8');
+}
+
+/**
+ * Determine if a pharmacy is currently open.
+ * 24-hour pharmacies always return true; others are checked against
+ * the current system time converted to minutes-since-midnight.
+ */
 function isPharmacyOpen(pharmacy) {
   if (pharmacy.is24Hours) return true;
   
@@ -18,9 +43,13 @@ function isPharmacyOpen(pharmacy) {
   return currentTime >= openTime && currentTime <= closeTime;
 }
 
-// Calculate distance between two points (Haversine formula)
+/**
+ * Haversine formula — calculate the great-circle distance (in km)
+ * between two geographic coordinates (lat/lon in degrees).
+ * Used to rank pharmacies by proximity to the user.
+ */
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Earth's radius in km
+  const R = 6371; // Earth's radius in kilometres
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a = 
@@ -142,14 +171,105 @@ router.post('/:id/stock', (req, res) => {
     });
   }
   
-  // In a real app, this would update the database
   pharmaciesData[pharmacyIndex].medicines = medicines;
   pharmaciesData[pharmacyIndex].lastUpdated = new Date().toISOString();
+  persist();
   
   res.json({
     success: true,
     message: 'Stock updated successfully',
     data: pharmaciesData[pharmacyIndex]
+  });
+});
+
+// POST - Toggle a single medicine in/out of stock
+router.post('/:id/stock/toggle', (req, res) => {
+  const { medicine, inStock } = req.body;
+  const idx = pharmaciesData.findIndex(p => p.id === req.params.id);
+
+  if (idx === -1) {
+    return res.status(404).json({ success: false, error: 'Pharmacy not found' });
+  }
+
+  const pharmacy = pharmaciesData[idx];
+  const medLower = medicine.toLowerCase();
+
+  if (inStock) {
+    // Add medicine if not already present
+    if (!pharmacy.medicines.some(m => m.toLowerCase() === medLower)) {
+      pharmacy.medicines.push(medLower);
+    }
+  } else {
+    // Remove medicine
+    pharmacy.medicines = pharmacy.medicines.filter(m => m.toLowerCase() !== medLower);
+  }
+
+  pharmacy.lastUpdated = new Date().toISOString();
+  persist();
+
+  res.json({
+    success: true,
+    message: `${medicine} marked ${inStock ? 'in stock' : 'out of stock'}`,
+    data: pharmacy
+  });
+});
+
+// PUT - Update pharmacy details (hours, delivery, status)
+router.put('/:id', (req, res) => {
+  const idx = pharmaciesData.findIndex(p => p.id === req.params.id);
+
+  if (idx === -1) {
+    return res.status(404).json({ success: false, error: 'Pharmacy not found' });
+  }
+
+  const allowed = ['openTime', 'closeTime', 'is24Hours', 'hasDelivery', 'phone', 'address'];
+  const updates = {};
+
+  for (const key of allowed) {
+    if (req.body[key] !== undefined) {
+      pharmaciesData[idx][key] = req.body[key];
+      updates[key] = req.body[key];
+    }
+  }
+
+  pharmaciesData[idx].lastUpdated = new Date().toISOString();
+  persist();
+
+  res.json({
+    success: true,
+    message: 'Pharmacy updated',
+    updates,
+    data: pharmaciesData[idx]
+  });
+});
+
+// GET - Dashboard stats for a pharmacy
+router.get('/:id/stats', (req, res) => {
+  const pharmacy = pharmaciesData.find(p => p.id === req.params.id);
+
+  if (!pharmacy) {
+    return res.status(404).json({ success: false, error: 'Pharmacy not found' });
+  }
+
+  // Load medicine catalog for matching
+  const medicinesData = require('../data/medicines.json');
+  const totalCatalog = medicinesData.length;
+  const inStockCount = pharmacy.medicines.length;
+  const outStockCount = totalCatalog - inStockCount;
+
+  res.json({
+    success: true,
+    data: {
+      pharmacy: pharmacy.name,
+      totalCatalog,
+      inStock: inStockCount,
+      outOfStock: outStockCount < 0 ? 0 : outStockCount,
+      hasDelivery: pharmacy.hasDelivery,
+      is24Hours: pharmacy.is24Hours,
+      isOpen: isPharmacyOpen(pharmacy),
+      reliabilityScore: pharmacy.reliabilityScore,
+      lastUpdated: pharmacy.lastUpdated
+    }
   });
 });
 

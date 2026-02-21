@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last Mile Medicine — Role Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #dbeafe;
+            --success: #16a34a;
+            --success-light: #dcfce7;
+            --warning: #eab308;
+            --destructive: #dc2626;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --radius: 0.5rem;
+            --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,.08);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ─── */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: .75rem 1.5rem;
+        }
+        .header-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .header svg { color: var(--primary); }
+        .header h1 { font-size: 1rem; font-weight: 700; }
+        .header .sdg {
+            margin-left: auto;
+            font-size: .75rem;
+            color: var(--text-muted);
+            background: var(--primary-light);
+            padding: .25rem .625rem;
+            border-radius: 999px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        /* ── Hero ─── */
+        .hero {
+            text-align: center;
+            padding: 3rem 1.5rem 1rem;
+        }
+        .hero h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -.03em;
+            margin-bottom: .5rem;
+        }
+        .hero p {
+            color: var(--text-muted);
+            font-size: .9375rem;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* ── Role Cards ─── */
+        .roles {
+            max-width: 960px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+        .role-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.75rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: all .2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+        .role-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+        .role-card .icon-ring {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+        .role-card .icon-ring svg { width: 24px; height: 24px; }
+        .role-card.user .icon-ring { background: var(--primary-light); color: var(--primary-dark); }
+        .role-card.pharmacy .icon-ring { background: var(--success-light); color: var(--success); }
+        .role-card.admin .icon-ring { background: #fef3c7; color: #d97706; }
+
+        .role-card h3 { font-size: 1.0625rem; font-weight: 700; margin-bottom: .25rem; }
+        .role-card .desc { font-size: .8125rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.6; }
+        .role-card .perms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .375rem;
+            margin-top: auto;
+        }
+        .role-card .perm {
+            font-size: .6875rem;
+            font-weight: 600;
+            padding: .25rem .5rem;
+            border-radius: 999px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .role-card .enter-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .375rem;
+            margin-top: 1.25rem;
+            padding: .5rem 1rem;
+            border-radius: var(--radius);
+            font-size: .8125rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all .15s;
+            font-family: inherit;
+        }
+        .role-card.user .enter-btn { background: var(--primary); color: white; }
+        .role-card.user .enter-btn:hover { background: var(--primary-dark); }
+        .role-card.pharmacy .enter-btn { background: var(--success); color: white; }
+        .role-card.pharmacy .enter-btn:hover { background: #15803d; }
+        .role-card.admin .enter-btn { background: #d97706; color: white; }
+        .role-card.admin .enter-btn:hover { background: #b45309; }
+
+        /* ── RBAC Table ─── */
+        .rbac {
+            max-width: 960px;
+            margin: 1.5rem auto 3rem;
+            padding: 0 1.5rem;
+        }
+        .rbac h3 {
+            font-size: .9375rem;
+            font-weight: 700;
+            margin-bottom: .75rem;
+            text-align: center;
+        }
+        .rbac table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            font-size: .8125rem;
+        }
+        .rbac th, .rbac td {
+            padding: .625rem .75rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .rbac th {
+            background: var(--bg);
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: .03em;
+            font-size: .6875rem;
+        }
+        .rbac td:first-child { text-align: left; font-weight: 600; }
+        .rbac .yes { color: var(--success); font-weight: 700; }
+        .rbac .no { color: #cbd5e1; }
+        .rbac .partial { color: var(--warning); font-weight: 600; }
+
+        /* ── Footer ─── */
+        .footer {
+            margin-top: auto;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            text-align: center;
+            font-size: .75rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            .hero h2 { font-size: 1.375rem; }
+            .roles { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-inner">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11v5"/><path d="M9.5 13.5h5"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/></svg>
+            <h1>Last Mile Medicine</h1>
+            <span class="sdg">SDG 3</span>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h2>Choose Your Dashboard</h2>
+        <p>Role-based access ensures medicine data integrity. Each role can only change what they're trusted to change.</p>
+    </section>
+
+    <div class="roles">
+
+        <!-- USER -->
+        <a class="role-card user" href="frontend/public/index.html" onclick="window.location.href='http://localhost:3000'; return false;">
+            <div class="icon-ring">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <h3>User Dashboard</h3>
+            <p class="desc">Search medicines, view availability, check safety profiles, upload prescriptions, and find nearby pharmacies with real-time stock data.</p>
+            <div class="perms">
+                <span class="perm">Search</span>
+                <span class="perm">Safety Check</span>
+                <span class="perm">Confirm Stock</span>
+                <span class="perm">Health Profile</span>
+                <span class="perm">Emergency</span>
+            </div>
+            <button class="enter-btn">Open User App &rarr;</button>
+        </a>
+
+        <!-- PHARMACY -->
+        <a class="role-card pharmacy" href="pharmacy-dashboard.html">
+            <div class="icon-ring">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"/><path d="M12 3v6"/></svg>
+            </div>
+            <h3>Pharmacy Dashboard</h3>
+            <p class="desc">Manage your inventory, toggle medicine stock, update operating hours, enable delivery, and build your reliability score with real-time updates.</p>
+            <div class="perms">
+                <span class="perm">Toggle Stock</span>
+                <span class="perm">Update Hours</span>
+                <span class="perm">Delivery</span>
+                <span class="perm">View Searches</span>
+                <span class="perm">Trust Score</span>
+            </div>
+            <button class="enter-btn">Open Pharmacy Portal &rarr;</button>
+        </a>
+
+        <!-- ADMIN -->
+        <a class="role-card admin" href="admin-dashboard.html">
+            <div class="icon-ring">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>Admin Dashboard</h3>
+            <p class="desc">Manage the master medicine database, verify pharmacy registrations, audit data changes, control allergy tags, and maintain trust &amp; safety.</p>
+            <div class="perms">
+                <span class="perm">Medicine CRUD</span>
+                <span class="perm">Allergy Tags</span>
+                <span class="perm">Verify Pharmacies</span>
+                <span class="perm">Audit Log</span>
+                <span class="perm">Analytics</span>
+            </div>
+            <button class="enter-btn">Open Admin Panel &rarr;</button>
+        </a>
+
+    </div>
+
+    <section class="rbac">
+        <h3>Who Can Change What?</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align:left;">Capability</th>
+                    <th>User</th>
+                    <th>Pharmacy</th>
+                    <th>Admin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Medicine Info (composition, allergy)</td>
+                    <td class="no">--</td>
+                    <td class="no">--</td>
+                    <td class="yes">Yes</td>
+                </tr>
+                <tr>
+                    <td>Stock Availability</td>
+                    <td class="partial">Confirm</td>
+                    <td class="yes">Yes</td>
+                    <td class="no">--</td>
+                </tr>
+                <tr>
+                    <td>Operating Hours</td>
+                    <td class="no">--</td>
+                    <td class="yes">Yes</td>
+                    <td class="no">--</td>
+                </tr>
+                <tr>
+                    <td>Allergy / Safety Data</td>
+                    <td class="partial">Personal</td>
+                    <td class="no">--</td>
+                    <td class="yes">Yes</td>
+                </tr>
+                <tr>
+                    <td>Pharmacy Verification</td>
+                    <td class="no">--</td>
+                    <td class="no">--</td>
+                    <td class="yes">Yes</td>
+                </tr>
+                <tr>
+                    <td>Search &amp; Emergency Mode</td>
+                    <td class="yes">Yes</td>
+                    <td class="no">--</td>
+                    <td class="no">--</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <footer class="footer">
+        &copy; 2026 Last Mile Medicine &middot; SDG 3: Good Health &amp; Well-Being &middot; Role-Based Access Control
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — Last Mile Medicine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #dbeafe;
+            --success: #16a34a;
+            --success-light: #dcfce7;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --destructive: #dc2626;
+            --destructive-light: #fee2e2;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --radius: 0.5rem;
+            --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;}
+
+        /* ── Sidebar ─── */
+        .layout{display:flex;min-height:100vh;}
+        .sidebar{width:220px;background:var(--text);color:#e2e8f0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:60;}
+        .sidebar .brand{padding:1rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid #334155;}
+        .sidebar .brand svg{color:var(--primary);flex-shrink:0;}
+        .sidebar .brand span{font-size:.8125rem;font-weight:700;color:#f1f5f9;}
+        .sidebar .role-badge{margin:0 1rem;padding:.25rem .625rem;border-radius:999px;font-size:.6875rem;font-weight:700;background:var(--warning-light);color:var(--warning);text-align:center;margin-top:.75rem;}
+        .sidebar nav{flex:1;padding:.75rem 0;}
+        .sidebar nav a{display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;font-size:.8125rem;color:#94a3b8;text-decoration:none;font-weight:500;border-left:3px solid transparent;transition:all .15s;}
+        .sidebar nav a:hover{background:#1e293b;color:#f1f5f9;}
+        .sidebar nav a.active{background:#1e293b;color:#f1f5f9;border-left-color:var(--primary);}
+        .sidebar nav a svg{width:16px;height:16px;flex-shrink:0;}
+        .sidebar .sidebar-foot{padding:1rem;border-top:1px solid #334155;font-size:.75rem;color:#475569;}
+        .sidebar .sidebar-foot a{color:var(--primary);text-decoration:none;display:block;margin-top:.375rem;font-weight:600;}
+
+        /* ── Main ─── */
+        .main{margin-left:220px;flex:1;min-width:0;}
+        .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:.625rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+        .topbar h2{font-size:1rem;font-weight:700;}
+        .topbar .admin-badge{background:var(--warning-light);color:var(--warning);padding:.25rem .75rem;border-radius:999px;font-size:.75rem;font-weight:700;}
+
+        .content{padding:1.5rem;max-width:1100px;}
+
+        /* ── Stats ─── */
+        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem;margin-bottom:1.5rem;}
+        .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;}
+        .stat-label{font-size:.6875rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);font-weight:600;margin-bottom:.25rem;}
+        .stat-value{font-size:1.375rem;font-weight:700;}
+        .stat-value.blue{color:var(--primary);}
+        .stat-value.green{color:var(--success);}
+        .stat-value.amber{color:var(--warning);}
+        .stat-value.red{color:var(--destructive);}
+
+        /* ── Card ─── */
+        .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:1.25rem;}
+        .card-head{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border-bottom:1px solid var(--border);}
+        .card-head h3{font-size:.875rem;font-weight:600;}
+        .card-body{padding:1rem;}
+
+        /* ── Table ─── */
+        table.data{width:100%;border-collapse:collapse;font-size:.8125rem;}
+        table.data th{text-align:left;padding:.5rem .75rem;background:var(--bg);font-weight:600;color:var(--text-muted);text-transform:uppercase;font-size:.6875rem;letter-spacing:.03em;border-bottom:1px solid var(--border);}
+        table.data td{padding:.625rem .75rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+        table.data tr:hover td{background:#f8fafc;}
+
+        /* ── Badges ─── */
+        .badge{display:inline-flex;align-items:center;gap:.25rem;padding:.1875rem .5rem;border-radius:999px;font-size:.6875rem;font-weight:600;}
+        .badge-green{background:var(--success-light);color:var(--success);}
+        .badge-red{background:var(--destructive-light);color:var(--destructive);}
+        .badge-amber{background:var(--warning-light);color:var(--warning);}
+        .badge-blue{background:var(--primary-light);color:var(--primary-dark);}
+        .badge-gray{background:#f1f5f9;color:#475569;}
+
+        /* ── Buttons ─── */
+        .btn{display:inline-flex;align-items:center;gap:.375rem;padding:.4375rem .875rem;border-radius:var(--radius);border:1px solid transparent;cursor:pointer;font-family:inherit;font-size:.8125rem;font-weight:600;transition:all .15s;}
+        .btn-primary{background:var(--primary);color:white;}.btn-primary:hover{background:var(--primary-dark);}
+        .btn-outline{background:var(--surface);border-color:var(--border);color:var(--text);}.btn-outline:hover{background:var(--bg);}
+        .btn-sm{padding:.25rem .5rem;font-size:.75rem;}
+        .btn-danger{background:var(--destructive);color:white;}.btn-danger:hover{background:#b91c1c;}
+        .btn-success{background:var(--success);color:white;}.btn-success:hover{background:#15803d;}
+
+        /* ── Search ─── */
+        .search-row{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap;}
+        .search-row input{flex:1;min-width:200px;padding:.5rem .75rem;border:1px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:.8125rem;outline:none;}
+        .search-row input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light);}
+
+        /* ── Tabs ─── */
+        .tab-panel{display:none;}
+        .tab-panel.active{display:block;}
+
+        /* ── Modal ─── */
+        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:80;align-items:center;justify-content:center;padding:1rem;}
+        .modal-overlay.open{display:flex;}
+        .modal{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow-md);max-width:560px;width:100%;max-height:85vh;overflow-y:auto;}
+        .modal-head{display:flex;align-items:center;justify-content:space-between;padding:1rem;border-bottom:1px solid var(--border);}
+        .modal-head h3{font-size:1rem;font-weight:600;}
+        .modal-close{background:none;border:none;cursor:pointer;font-size:1.25rem;color:var(--text-muted);line-height:1;}
+        .modal-body{padding:1rem;}
+        .modal-body .field{margin-bottom:.75rem;}
+        .modal-body .field label{display:block;font-size:.8125rem;font-weight:500;margin-bottom:.25rem;color:var(--text-muted);}
+        .modal-body .field input,.modal-body .field select,.modal-body .field textarea{width:100%;padding:.5rem .75rem;border:1px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:.875rem;outline:none;}
+        .modal-body .field textarea{resize:vertical;min-height:60px;}
+        .modal-body .field input:focus,.modal-body .field select:focus,.modal-body .field textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light);}
+        .modal-foot{display:flex;justify-content:flex-end;gap:.5rem;padding:.75rem 1rem;border-top:1px solid var(--border);}
+
+        /* ── Chips ─── */
+        .chip-list{display:flex;flex-wrap:wrap;gap:.375rem;margin-top:.375rem;}
+        .chip{display:inline-flex;align-items:center;gap:.25rem;padding:.1875rem .5rem;border-radius:999px;font-size:.6875rem;font-weight:600;background:var(--bg);border:1px solid var(--border);}
+        .chip .remove{cursor:pointer;color:var(--text-muted);font-size:.875rem;line-height:1;}
+        .chip .remove:hover{color:var(--destructive);}
+
+        /* ── Audit Log ─── */
+        .audit-item{display:flex;gap:.75rem;padding:.625rem 0;border-bottom:1px solid var(--border);}
+        .audit-item:last-child{border-bottom:none;}
+        .audit-dot{width:8px;height:8px;border-radius:50%;margin-top:.375rem;flex-shrink:0;}
+        .audit-dot.add{background:var(--success);}
+        .audit-dot.edit{background:var(--primary);}
+        .audit-dot.delete{background:var(--destructive);}
+        .audit-dot.verify{background:var(--warning);}
+        .audit-text{font-size:.8125rem;color:var(--text);}
+        .audit-time{font-size:.6875rem;color:var(--text-muted);}
+
+        /* ── Toast ─── */
+        .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--text);color:white;padding:.75rem 1.25rem;border-radius:var(--radius);font-size:.875rem;font-weight:500;box-shadow:var(--shadow-md);opacity:0;transform:translateY(8px);transition:all .25s;z-index:100;}
+        .toast.show{opacity:1;transform:translateY(0);}
+
+        @media(max-width:768px){
+            .sidebar{width:56px;}.sidebar .brand span,.sidebar nav a span,.sidebar .role-badge,.sidebar .sidebar-foot{display:none;}
+            .sidebar .brand{padding:.75rem;justify-content:center;}
+            .sidebar nav a{justify-content:center;padding:.625rem;border-left:none;}
+            .main{margin-left:56px;}
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Sidebar ─── -->
+<div class="layout">
+    <aside class="sidebar">
+        <div class="brand">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11v5"/><path d="M9.5 13.5h5"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/></svg>
+            <span>Last Mile Medicine</span>
+        </div>
+        <div class="role-badge">Admin</div>
+        <nav>
+            <a href="#" class="active" data-tab="overview" onclick="switchTab('overview',this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                <span>Overview</span>
+            </a>
+            <a href="#" data-tab="medicines" onclick="switchTab('medicines',this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+                <span>Medicines</span>
+            </a>
+            <a href="#" data-tab="pharmacies" onclick="switchTab('pharmacies',this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"/><path d="M12 3v6"/></svg>
+                <span>Pharmacies</span>
+            </a>
+            <a href="#" data-tab="audit" onclick="switchTab('audit',this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                <span>Audit Log</span>
+            </a>
+            <a href="#" data-tab="ngo" onclick="switchTab('ngo',this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                <span>NGO / Gov</span>
+            </a>
+        </nav>
+        <div class="sidebar-foot">
+            <span>v1.0.0</span>
+            <a href="index.html">&larr; Role Portal</a>
+        </div>
+    </aside>
+
+    <div class="main">
+        <div class="topbar">
+            <h2 id="pageTitle">Overview</h2>
+            <span class="admin-badge">Admin Access</span>
+        </div>
+
+        <div class="content">
+
+            <!-- ─── Overview ─── -->
+            <div id="tab-overview" class="tab-panel active">
+                <div class="stats" id="overviewStats"></div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div class="card">
+                        <div class="card-head"><h3>Category Breakdown</h3></div>
+                        <div class="card-body" id="categoryBreakdown"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-head"><h3>Pharmacy Trust Levels</h3></div>
+                        <div class="card-body" id="trustLevels"></div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:1rem;">
+                    <div class="card-head"><h3>Recent Activity</h3></div>
+                    <div class="card-body" id="recentActivity"></div>
+                </div>
+            </div>
+
+            <!-- ─── Medicines ─── -->
+            <div id="tab-medicines" class="tab-panel">
+                <div class="card">
+                    <div class="card-head">
+                        <h3>Medicine Catalog</h3>
+                        <button class="btn btn-primary btn-sm" onclick="openMedModal()">+ Add Medicine</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="search-row">
+                            <input type="text" id="medSearch" placeholder="Search medicines…" oninput="renderMedicines()">
+                        </div>
+                        <div style="overflow-x:auto;">
+                            <table class="data" id="medTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Generic</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Rx</th>
+                                        <th>Allergy Tags</th>
+                                        <th>Safety</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="medBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── Pharmacies ─── -->
+            <div id="tab-pharmacies" class="tab-panel">
+                <div class="card">
+                    <div class="card-head">
+                        <h3>Registered Pharmacies</h3>
+                        <span class="badge badge-blue" id="phCount"></span>
+                    </div>
+                    <div class="card-body">
+                        <div class="search-row">
+                            <input type="text" id="phSearch" placeholder="Search pharmacies…" oninput="renderPharmacies()">
+                        </div>
+                        <div style="overflow-x:auto;">
+                            <table class="data">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>Hours</th>
+                                        <th>Delivery</th>
+                                        <th>Trust</th>
+                                        <th>Stock</th>
+                                        <th>Last Updated</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="phBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── Audit ─── -->
+            <div id="tab-audit" class="tab-panel">
+                <div class="card">
+                    <div class="card-head">
+                        <h3>Audit Log</h3>
+                        <span class="badge badge-gray" id="auditCount"></span>
+                    </div>
+                    <div class="card-body" id="auditBody"></div>
+                </div>
+            </div>
+
+            <!-- ─── NGO / Government Analytics ─── -->
+            <div id="tab-ngo" class="tab-panel">
+                <div class="stats" id="ngoStats"></div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div class="card">
+                        <div class="card-head">
+                            <h3>Medicine Shortage Alerts</h3>
+                            <span class="badge badge-red" id="shortageCount"></span>
+                        </div>
+                        <div class="card-body" id="shortageList"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3>High Demand Medicines</h3>
+                            <span class="badge badge-amber" id="demandBadge">Trending</span>
+                        </div>
+                        <div class="card-body" id="demandTrends"></div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:1rem;">
+                    <div class="card-head">
+                        <h3>Geographic Coverage Gaps</h3>
+                        <button class="btn btn-outline btn-sm" onclick="exportNGOReport()">⬇ Export Report</button>
+                    </div>
+                    <div class="card-body" id="coverageGaps"></div>
+                </div>
+
+                <div class="card" style="margin-top:1rem;">
+                    <div class="card-head">
+                        <h3>Essential Medicine Availability Matrix</h3>
+                    </div>
+                    <div class="card-body" style="overflow-x:auto;">
+                        <table class="data" id="essentialMatrix">
+                            <thead id="matrixHead"></thead>
+                            <tbody id="matrixBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:1rem;">
+                    <div class="card-head">
+                        <h3>Policy Recommendations</h3>
+                        <span class="badge badge-blue">AI-Generated</span>
+                    </div>
+                    <div class="card-body" id="policyRecs"></div>
+                </div>
+            </div>
+
+        </div><!-- .content -->
+    </div><!-- .main -->
+</div><!-- .layout -->
+
+<!-- ── Medicine Modal ─── -->
+<div class="modal-overlay" id="medModal">
+    <div class="modal">
+        <div class="modal-head">
+            <h3 id="medModalTitle">Add Medicine</h3>
+            <button class="modal-close" onclick="closeMedModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editMedId">
+            <div class="field"><label>Name *</label><input id="mName"></div>
+            <div class="field"><label>Generic Name *</label><input id="mGeneric"></div>
+            <div class="field"><label>Category *</label><input id="mCategory" placeholder="Pain Relief, Antibiotic…"></div>
+            <div class="field"><label>Brand Names (comma-separated)</label><input id="mBrands"></div>
+            <div class="field"><label>Avg. Price (₹)</label><input id="mPrice" type="number" min="0"></div>
+            <div class="field"><label>Composition (comma-separated)</label><input id="mComposition"></div>
+            <div class="field"><label>Drug Class</label><input id="mDrugClass"></div>
+            <div class="field"><label>Common Uses (comma-separated)</label><input id="mUses"></div>
+            <div class="field">
+                <label>Allergy Tags (comma-separated)</label>
+                <input id="mAllergyTags" placeholder="penicillin, nsaid, sulfa…">
+            </div>
+            <div class="field">
+                <label>Pregnancy Safety</label>
+                <select id="mPregnancy"><option value="safe">Safe</option><option value="caution">Caution</option><option value="avoid">Avoid</option></select>
+            </div>
+            <div class="field">
+                <label>Requires Prescription</label>
+                <select id="mRx"><option value="false">No</option><option value="true">Yes</option></select>
+            </div>
+            <div class="field"><label>Side Effects (comma-separated)</label><textarea id="mSideEffects"></textarea></div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn btn-outline" onclick="closeMedModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveMedicine()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'http://localhost:5000/api';
+
+let allMedicines = [];
+let allPharmacies = [];
+let auditLog = JSON.parse(localStorage.getItem('adminAuditLog') || '[]');
+
+// ── Init ─────────────────────────────────────────
+(async function boot() {
+    await Promise.all([loadMedicines(), loadPharmacies()]);
+    renderOverview();
+    renderMedicines();
+    renderPharmacies();
+    renderAudit();
+    renderNGODashboard();
+})();
+
+async function loadMedicines() {
+    const r = await fetch(`${API}/medicines`);
+    const j = await r.json();
+    allMedicines = j.data;
+}
+
+async function loadPharmacies() {
+    const r = await fetch(`${API}/pharmacies`);
+    const j = await r.json();
+    allPharmacies = j.data;
+}
+
+// ── Tabs ─────────────────────────────────────────
+function switchTab(tab, el) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    el.classList.add('active');
+    const titles = { overview:'Overview', medicines:'Medicine Catalog', pharmacies:'Pharmacy Management', audit:'Audit Log', ngo:'NGO / Government Analytics' };
+    document.getElementById('pageTitle').textContent = titles[tab] || tab;
+    return false;
+}
+
+// ── Overview ─────────────────────────────────────
+function renderOverview() {
+    // Stats
+    const rxCount = allMedicines.filter(m => m.requiresPrescription).length;
+    const avgReliability = allPharmacies.length
+        ? (allPharmacies.reduce((s,p) => s + p.reliabilityScore, 0) / allPharmacies.length).toFixed(1)
+        : '—';
+    const deliveryCount = allPharmacies.filter(p => p.hasDelivery).length;
+    const h24Count = allPharmacies.filter(p => p.is24Hours).length;
+
+    document.getElementById('overviewStats').innerHTML = `
+        <div class="stat"><div class="stat-label">Total Medicines</div><div class="stat-value blue">${allMedicines.length}</div></div>
+        <div class="stat"><div class="stat-label">Pharmacies</div><div class="stat-value green">${allPharmacies.length}</div></div>
+        <div class="stat"><div class="stat-label">Prescription Drugs</div><div class="stat-value amber">${rxCount}</div></div>
+        <div class="stat"><div class="stat-label">Avg Trust Score</div><div class="stat-value blue">${avgReliability}/5</div></div>
+        <div class="stat"><div class="stat-label">Delivery Enabled</div><div class="stat-value green">${deliveryCount}</div></div>
+        <div class="stat"><div class="stat-label">24/7 Open</div><div class="stat-value amber">${h24Count}</div></div>
+    `;
+
+    // Category breakdown
+    const cats = {};
+    allMedicines.forEach(m => { cats[m.category] = (cats[m.category] || 0) + 1; });
+    document.getElementById('categoryBreakdown').innerHTML = Object.entries(cats)
+        .sort((a,b) => b[1]-a[1])
+        .map(([cat,cnt]) => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.375rem 0;border-bottom:1px solid var(--border);">
+                <span style="font-size:.8125rem;font-weight:500;">${cat}</span>
+                <span class="badge badge-blue">${cnt}</span>
+            </div>`).join('');
+
+    // Trust levels
+    document.getElementById('trustLevels').innerHTML = allPharmacies
+        .sort((a,b) => b.reliabilityScore - a.reliabilityScore)
+        .map(p => {
+            const color = p.reliabilityScore >= 4.5 ? 'green' : p.reliabilityScore >= 4 ? 'blue' : p.reliabilityScore >= 3.5 ? 'amber' : 'red';
+            return `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.375rem 0;border-bottom:1px solid var(--border);">
+                <span style="font-size:.8125rem;font-weight:500;">${p.name}</span>
+                <span class="badge badge-${color}">${p.reliabilityScore}/5</span>
+            </div>`;
+        }).join('');
+
+    // Recent activity
+    const recent = auditLog.slice(-6).reverse();
+    document.getElementById('recentActivity').innerHTML = recent.length
+        ? recent.map(a => `<div class="audit-item"><div class="audit-dot ${a.type}"></div><div><div class="audit-text">${a.text}</div><div class="audit-time">${new Date(a.time).toLocaleString()}</div></div></div>`).join('')
+        : '<p style="color:var(--text-muted);font-size:.8125rem;">No recent activity.</p>';
+}
+
+// ── Medicines ────────────────────────────────────
+function renderMedicines() {
+    const q = (document.getElementById('medSearch')?.value || '').toLowerCase();
+    const filtered = allMedicines.filter(m =>
+        !q || m.name.toLowerCase().includes(q) || m.genericName.toLowerCase().includes(q) || m.category.toLowerCase().includes(q)
+    );
+
+    document.getElementById('medBody').innerHTML = filtered.map(m => {
+        const tags = (m.allergyTags || []).map(t => `<span class="badge badge-red" style="margin-right:2px;">${t}</span>`).join('') || '<span style="color:var(--text-muted)">—</span>';
+        const pregBadge = m.pregnancySafety === 'safe' ? 'badge-green' : m.pregnancySafety === 'caution' ? 'badge-amber' : 'badge-red';
+        return `<tr>
+            <td><strong>${m.name}</strong></td>
+            <td>${m.genericName}</td>
+            <td>${m.category}</td>
+            <td>₹${m.avgPrice}</td>
+            <td>${m.requiresPrescription ? '<span class="badge badge-amber">Rx</span>' : '<span class="badge badge-green">OTC</span>'}</td>
+            <td>${tags}</td>
+            <td><span class="badge ${pregBadge}">Preg: ${m.pregnancySafety}</span></td>
+            <td>
+                <button class="btn btn-outline btn-sm" onclick='editMedicine("${m.id}")'>Edit</button>
+                <button class="btn btn-sm" style="color:var(--destructive);border:none;background:none;" onclick='deleteMedicine("${m.id}")'>Del</button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+// ── Med Modal ────────────────────────────────────
+function openMedModal() {
+    document.getElementById('medModalTitle').textContent = 'Add Medicine';
+    document.getElementById('editMedId').value = '';
+    ['mName','mGeneric','mCategory','mBrands','mPrice','mComposition','mDrugClass','mUses','mAllergyTags','mSideEffects'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('mPregnancy').value = 'safe';
+    document.getElementById('mRx').value = 'false';
+    document.getElementById('medModal').classList.add('open');
+}
+
+function editMedicine(id) {
+    const m = allMedicines.find(x => x.id === id);
+    if (!m) return;
+    document.getElementById('medModalTitle').textContent = 'Edit Medicine';
+    document.getElementById('editMedId').value = m.id;
+    document.getElementById('mName').value = m.name;
+    document.getElementById('mGeneric').value = m.genericName;
+    document.getElementById('mCategory').value = m.category;
+    document.getElementById('mBrands').value = (m.brandNames||[]).join(', ');
+    document.getElementById('mPrice').value = m.avgPrice||'';
+    document.getElementById('mComposition').value = (m.composition||[]).join(', ');
+    document.getElementById('mDrugClass').value = m.drugClass||'';
+    document.getElementById('mUses').value = (m.commonUses||[]).join(', ');
+    document.getElementById('mAllergyTags').value = (m.allergyTags||[]).join(', ');
+    document.getElementById('mPregnancy').value = m.pregnancySafety||'safe';
+    document.getElementById('mRx').value = m.requiresPrescription ? 'true' : 'false';
+    document.getElementById('mSideEffects').value = (m.sideEffects||[]).join(', ');
+    document.getElementById('medModal').classList.add('open');
+}
+
+function closeMedModal() { document.getElementById('medModal').classList.remove('open'); }
+
+async function saveMedicine() {
+    const id = document.getElementById('editMedId').value;
+    const split = v => v ? v.split(',').map(s=>s.trim()).filter(Boolean) : [];
+    const body = {
+        name: document.getElementById('mName').value.trim(),
+        genericName: document.getElementById('mGeneric').value.trim(),
+        category: document.getElementById('mCategory').value.trim(),
+        brandNames: split(document.getElementById('mBrands').value),
+        avgPrice: parseFloat(document.getElementById('mPrice').value)||0,
+        composition: split(document.getElementById('mComposition').value),
+        drugClass: document.getElementById('mDrugClass').value.trim(),
+        commonUses: split(document.getElementById('mUses').value),
+        allergyTags: split(document.getElementById('mAllergyTags').value),
+        pregnancySafety: document.getElementById('mPregnancy').value,
+        requiresPrescription: document.getElementById('mRx').value === 'true',
+        sideEffects: split(document.getElementById('mSideEffects').value)
+    };
+    if (!body.name||!body.genericName||!body.category) { toast('Name, Generic, Category required'); return; }
+
+    try {
+        if (id) {
+            await fetch(`${API}/medicines/admin/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+            addAudit('edit', `Updated medicine: ${body.name}`);
+            toast('Medicine updated');
+        } else {
+            await fetch(`${API}/medicines/admin/add`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+            addAudit('add', `Added new medicine: ${body.name}`);
+            toast('Medicine added');
+        }
+        closeMedModal();
+        await loadMedicines();
+        renderMedicines();
+        renderOverview();
+    } catch(e) { toast('Save failed'); }
+}
+
+async function deleteMedicine(id) {
+    if (!confirm('Delete this medicine from the catalog?')) return;
+    const med = allMedicines.find(m => m.id === id);
+    try {
+        await fetch(`${API}/medicines/admin/${id}`, { method:'DELETE' });
+        addAudit('delete', `Deleted medicine: ${med?.name || id}`);
+        toast('Medicine deleted');
+        await loadMedicines();
+        renderMedicines();
+        renderOverview();
+    } catch(e) { toast('Delete failed'); }
+}
+
+// ── Pharmacies ───────────────────────────────────
+function renderPharmacies() {
+    const q = (document.getElementById('phSearch')?.value || '').toLowerCase();
+    const filtered = allPharmacies.filter(p =>
+        !q || p.name.toLowerCase().includes(q) || p.address.toLowerCase().includes(q)
+    );
+    document.getElementById('phCount').textContent = filtered.length + ' total';
+
+    document.getElementById('phBody').innerHTML = filtered.map(p => {
+        const trustColor = p.reliabilityScore >= 4.5 ? 'badge-green' : p.reliabilityScore >= 4 ? 'badge-blue' : p.reliabilityScore >= 3.5 ? 'badge-amber' : 'badge-red';
+        const hours = p.is24Hours ? '24/7' : `${p.openTime}–${p.closeTime}`;
+        const updated = p.lastUpdated ? new Date(p.lastUpdated).toLocaleDateString() : '—';
+        return `<tr>
+            <td><strong>${p.name}</strong></td>
+            <td>${p.address}</td>
+            <td>${hours}</td>
+            <td>${p.hasDelivery ? '<span class="badge badge-green">Yes</span>':'<span class="badge badge-gray">No</span>'}</td>
+            <td><span class="badge ${trustColor}">${p.reliabilityScore}/5</span></td>
+            <td><span class="badge badge-blue">${p.medicines.length} items</span></td>
+            <td>${updated}</td>
+            <td>
+                <button class="btn btn-success btn-sm" onclick="verifyPharmacy('${p.id}','${p.name}')">Verify</button>
+                <button class="btn btn-outline btn-sm" onclick="flagPharmacy('${p.id}','${p.name}')">Flag</button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function verifyPharmacy(id, name) {
+    addAudit('verify', `Verified pharmacy: ${name}`);
+    toast(`${name} verified`);
+}
+
+function flagPharmacy(id, name) {
+    const reason = prompt(`Flag ${name} — reason:`);
+    if (!reason) return;
+    addAudit('delete', `Flagged pharmacy: ${name} — ${reason}`);
+    toast(`${name} flagged`);
+}
+
+// ── Audit Log ────────────────────────────────────
+function addAudit(type, text) {
+    auditLog.push({ type, text, time: new Date().toISOString() });
+    localStorage.setItem('adminAuditLog', JSON.stringify(auditLog));
+    renderAudit();
+}
+
+function renderAudit() {
+    const items = auditLog.slice().reverse();
+    document.getElementById('auditCount').textContent = items.length + ' entries';
+    document.getElementById('auditBody').innerHTML = items.length
+        ? items.map(a => `
+            <div class="audit-item">
+                <div class="audit-dot ${a.type}"></div>
+                <div>
+                    <div class="audit-text">${a.text}</div>
+                    <div class="audit-time">${new Date(a.time).toLocaleString()}</div>
+                </div>
+            </div>`).join('')
+        : '<p style="color:var(--text-muted);font-size:.8125rem;padding:1rem 0;">No audit entries yet. Actions in Medicines and Pharmacies tabs will appear here.</p>';
+}
+
+// ── NGO / Government Analytics ───────────────────
+function renderNGODashboard() {
+    if (!allMedicines.length || !allPharmacies.length) return;
+
+    // --- Stats ---
+    const essentialMeds = allMedicines.filter(m => ['Pain Relief','Antibiotic','Diabetes'].includes(m.category));
+    const rxMeds = allMedicines.filter(m => m.requiresPrescription);
+    const avgStock = allPharmacies.length
+        ? (allPharmacies.reduce((s,p) => s + p.medicines.length, 0) / allPharmacies.length).toFixed(1)
+        : 0;
+    const coverage24 = allPharmacies.filter(p => p.is24Hours).length;
+    const deliveryPct = allPharmacies.length
+        ? Math.round((allPharmacies.filter(p => p.hasDelivery).length / allPharmacies.length) * 100)
+        : 0;
+
+    document.getElementById('ngoStats').innerHTML = `
+        <div class="stat"><div class="stat-label">Essential Medicines</div><div class="stat-value blue">${essentialMeds.length}</div></div>
+        <div class="stat"><div class="stat-label">Prescription-Only</div><div class="stat-value amber">${rxMeds.length}</div></div>
+        <div class="stat"><div class="stat-label">Avg Stock / Pharmacy</div><div class="stat-value green">${avgStock}</div></div>
+        <div class="stat"><div class="stat-label">24/7 Coverage</div><div class="stat-value blue">${coverage24} / ${allPharmacies.length}</div></div>
+        <div class="stat"><div class="stat-label">Delivery Access</div><div class="stat-value green">${deliveryPct}%</div></div>
+        <div class="stat"><div class="stat-label">Total Pharmacies</div><div class="stat-value blue">${allPharmacies.length}</div></div>
+    `;
+
+    // --- Shortage Alerts ---
+    // Find medicines that fewer pharmacies stock
+    const medStockMap = {};
+    allMedicines.forEach(m => { medStockMap[m.name] = 0; });
+    allPharmacies.forEach(p => {
+        (p.medicines || []).forEach(pm => {
+            const med = allMedicines.find(m => m.name.toLowerCase() === pm.name.toLowerCase());
+            if (med && pm.inStock) {
+                medStockMap[med.name] = (medStockMap[med.name] || 0) + 1;
+            }
+        });
+    });
+
+    const shortages = Object.entries(medStockMap)
+        .map(([name, count]) => ({ name, stocked: count, total: allPharmacies.length, pct: Math.round((count / allPharmacies.length) * 100) }))
+        .sort((a, b) => a.stocked - b.stocked);
+
+    const criticalShortages = shortages.filter(s => s.pct < 50);
+    document.getElementById('shortageCount').textContent = criticalShortages.length + ' alerts';
+
+    document.getElementById('shortageList').innerHTML = shortages.slice(0, 10).map(s => {
+        const color = s.pct >= 60 ? 'green' : s.pct >= 30 ? 'amber' : 'red';
+        return `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--border);">
+                <div>
+                    <strong style="font-size:.8125rem;">${s.name}</strong>
+                    <div style="font-size:.6875rem;color:var(--text-muted);">Available at ${s.stocked} of ${s.total} pharmacies</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:.5rem;">
+                    <div style="width:60px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
+                        <div style="width:${s.pct}%;height:100%;background:var(--${color === 'green' ? 'success' : color === 'amber' ? 'warning' : 'destructive'});border-radius:3px;"></div>
+                    </div>
+                    <span class="badge badge-${color}">${s.pct}%</span>
+                </div>
+            </div>`;
+    }).join('') || '<p style="color:var(--text-muted);font-size:.8125rem;">No data available</p>';
+
+    // --- Demand Trends (simulated based on categories) ---
+    const catDemand = {};
+    allMedicines.forEach(m => {
+        catDemand[m.category] = (catDemand[m.category] || 0) + 1;
+    });
+
+    const demandData = Object.entries(catDemand)
+        .sort((a, b) => b[1] - a[1])
+        .map(([cat, count]) => {
+            // Simulate demand trend
+            const trend = ['Pain Relief','Antibiotic','Diabetes'].includes(cat) ? 'high' : count > 1 ? 'medium' : 'low';
+            const trendIcon = trend === 'high' ? '↑' : trend === 'medium' ? '→' : '↓';
+            const trendColor = trend === 'high' ? 'red' : trend === 'medium' ? 'amber' : 'green';
+            return { cat, count, trend, trendIcon, trendColor };
+        });
+
+    document.getElementById('demandTrends').innerHTML = demandData.map(d => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--border);">
+            <div>
+                <strong style="font-size:.8125rem;">${d.cat}</strong>
+                <div style="font-size:.6875rem;color:var(--text-muted);">${d.count} medicine${d.count>1?'s':''} in catalog</div>
+            </div>
+            <span class="badge badge-${d.trendColor}">${d.trendIcon} ${d.trend} demand</span>
+        </div>`).join('');
+
+    // --- Coverage Gaps ---
+    const noDelivery = allPharmacies.filter(p => !p.hasDelivery);
+    const no24h = allPharmacies.filter(p => !p.is24Hours);
+    const lowTrust = allPharmacies.filter(p => p.reliabilityScore < 4);
+    const lowStock = allPharmacies.filter(p => (p.medicines || []).length < 5);
+
+    document.getElementById('coverageGaps').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+            <div style="padding:.75rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);">
+                <div style="font-size:.6875rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;margin-bottom:.25rem;">No Delivery Service</div>
+                <div style="font-size:1.25rem;font-weight:700;color:var(--destructive);">${noDelivery.length}</div>
+                <div style="font-size:.6875rem;color:var(--text-muted);margin-top:.25rem;">${noDelivery.map(p=>p.name).join(', ') || 'All have delivery'}</div>
+            </div>
+            <div style="padding:.75rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);">
+                <div style="font-size:.6875rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;margin-bottom:.25rem;">No 24/7 Access</div>
+                <div style="font-size:1.25rem;font-weight:700;color:var(--warning);">${no24h.length}</div>
+                <div style="font-size:.6875rem;color:var(--text-muted);margin-top:.25rem;">${no24h.map(p=>p.name).join(', ') || 'All are 24/7'}</div>
+            </div>
+            <div style="padding:.75rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);">
+                <div style="font-size:.6875rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;margin-bottom:.25rem;">Low Trust (< 4.0)</div>
+                <div style="font-size:1.25rem;font-weight:700;color:var(--warning);">${lowTrust.length}</div>
+                <div style="font-size:.6875rem;color:var(--text-muted);margin-top:.25rem;">${lowTrust.map(p=>p.name+' ('+p.reliabilityScore+')').join(', ') || 'All trusted'}</div>
+            </div>
+            <div style="padding:.75rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);">
+                <div style="font-size:.6875rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;margin-bottom:.25rem;">Low Stock (< 5 items)</div>
+                <div style="font-size:1.25rem;font-weight:700;color:var(--destructive);">${lowStock.length}</div>
+                <div style="font-size:.6875rem;color:var(--text-muted);margin-top:.25rem;">${lowStock.map(p=>p.name).join(', ') || 'All well-stocked'}</div>
+            </div>
+        </div>
+    `;
+
+    // --- Essential Medicine Availability Matrix ---
+    const essentialNames = ['Paracetamol','Amoxicillin','Insulin','Metformin','Aspirin','Cetirizine','Ibuprofen'];
+    const matrixMeds = essentialNames.filter(name => allMedicines.some(m => m.name === name));
+
+    document.getElementById('matrixHead').innerHTML = `<tr><th>Pharmacy</th>${matrixMeds.map(n=>`<th style="text-align:center;">${n}</th>`).join('')}<th style="text-align:center;">Score</th></tr>`;
+
+    document.getElementById('matrixBody').innerHTML = allPharmacies.map(p => {
+        const phMeds = (p.medicines || []).map(m => m.name.toLowerCase());
+        let score = 0;
+        const cells = matrixMeds.map(name => {
+            const has = phMeds.includes(name.toLowerCase());
+            if (has) score++;
+            return `<td style="text-align:center;"><span class="badge ${has ? 'badge-green' : 'badge-red'}">${has ? '✓' : '✗'}</span></td>`;
+        }).join('');
+        const pct = Math.round((score / matrixMeds.length) * 100);
+        const scoreColor = pct >= 70 ? 'badge-green' : pct >= 40 ? 'badge-amber' : 'badge-red';
+        return `<tr><td><strong>${p.name}</strong></td>${cells}<td style="text-align:center;"><span class="badge ${scoreColor}">${pct}%</span></td></tr>`;
+    }).join('');
+
+    // --- Policy Recommendations ---
+    const recs = [];
+    if (criticalShortages.length > 0) {
+        recs.push({ icon: '🔴', title: 'Critical Medicine Shortages', text: `${criticalShortages.length} medicines are available at fewer than 50% of pharmacies: ${criticalShortages.slice(0,3).map(s=>s.name).join(', ')}. Recommend government-subsidized restocking program.` });
+    }
+    if (no24h.length > allPharmacies.length * 0.5) {
+        recs.push({ icon: '🟡', title: 'Insufficient 24/7 Coverage', text: `Only ${allPharmacies.length - no24h.length} of ${allPharmacies.length} pharmacies offer 24/7 service. Night-time emergencies are underserved. Recommend incentivizing extended hours.` });
+    }
+    if (noDelivery.length > 0) {
+        recs.push({ icon: '🟡', title: 'Delivery Access Gap', text: `${noDelivery.length} pharmacies lack delivery service, limiting access for elderly and disabled populations. Recommend partnering with local delivery services.` });
+    }
+    if (lowTrust.length > 0) {
+        recs.push({ icon: '🟠', title: 'Trust & Quality Concerns', text: `${lowTrust.length} pharmacies have trust scores below 4.0. Recommend regular inspections and community feedback programs.` });
+    }
+    recs.push({ icon: '🟢', title: 'Digital Health Integration', text: 'This platform supports SDG 3 (Good Health & Well-Being) by connecting underserved communities with essential medicines. Recommend expanding pharmacy onboarding.' });
+
+    document.getElementById('policyRecs').innerHTML = recs.map(r => `
+        <div style="display:flex;gap:.75rem;padding:.625rem 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:1.25rem;flex-shrink:0;">${r.icon}</span>
+            <div>
+                <strong style="font-size:.8125rem;">${r.title}</strong>
+                <p style="font-size:.75rem;color:var(--text-muted);margin-top:.125rem;line-height:1.5;">${r.text}</p>
+            </div>
+        </div>`).join('');
+}
+
+function exportNGOReport() {
+    const lines = [
+        'LAST MILE MEDICINE — NGO / GOVERNMENT REPORT',
+        '================================================',
+        `Generated: ${new Date().toLocaleString()}`,
+        '',
+        `Total Medicines in Database: ${allMedicines.length}`,
+        `Total Pharmacies: ${allPharmacies.length}`,
+        `24/7 Pharmacies: ${allPharmacies.filter(p=>p.is24Hours).length}`,
+        `Delivery-Enabled: ${allPharmacies.filter(p=>p.hasDelivery).length}`,
+        '',
+        'ESSENTIAL MEDICINE AVAILABILITY:',
+        '─────────────────────────────────',
+    ];
+
+    const essentialNames = ['Paracetamol','Amoxicillin','Insulin','Metformin','Aspirin','Cetirizine','Ibuprofen'];
+    essentialNames.forEach(name => {
+        const count = allPharmacies.filter(p => (p.medicines||[]).some(m => m.name.toLowerCase() === name.toLowerCase())).length;
+        lines.push(`  ${name}: ${count} / ${allPharmacies.length} pharmacies (${Math.round(count/allPharmacies.length*100)}%)`);
+    });
+
+    lines.push('', 'COVERAGE GAPS:', '─────────────────────────────────');
+    const noDelivery = allPharmacies.filter(p => !p.hasDelivery);
+    const no24h = allPharmacies.filter(p => !p.is24Hours);
+    lines.push(`  No delivery: ${noDelivery.map(p=>p.name).join(', ') || 'None'}`);
+    lines.push(`  No 24/7: ${no24h.map(p=>p.name).join(', ') || 'None'}`);
+    lines.push('', 'Report generated by Last Mile Medicine platform — SDG 3: Good Health & Well-Being');
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `LMM_NGO_Report_${new Date().toISOString().slice(0,10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Report exported');
+}
+
+// ── Toast ────────────────────────────────────────
+function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>

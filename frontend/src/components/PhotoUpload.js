@@ -57,8 +57,8 @@ function PhotoUpload({ onMedicinesDetected }) {
         <label htmlFor="photo-input" className="upload-label">
           {!preview ? (
             <>
-              <span className="upload-icon">📸</span>
-              <span className="upload-text">Click to upload prescription or medicine photo</span>
+              <span className="upload-icon">□</span>
+              <span className="upload-text">Upload prescription or medicine photo</span>
               <span className="upload-hint">Supports JPG, PNG (max 5MB)</span>
             </>
           ) : (
@@ -76,7 +76,7 @@ function PhotoUpload({ onMedicinesDetected }) {
 
       {result && !uploading && (
         <div className="upload-result">
-          <h4>📋 Detected Medicines:</h4>
+          <h4>Detected medicines:</h4>
           {result.extracted.medicines.length > 0 ? (
             <div className="detected-medicines">
               {result.extracted.medicines.map((med, idx) => (

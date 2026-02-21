@@ -1,13 +1,23 @@
+/**
+ * OCR Route — /api/ocr
+ * 
+ * Handles prescription image uploads, runs text extraction (OCR),
+ * and detects medicine names from the extracted text using a
+ * keyword-matching approach against a known medicine dictionary.
+ * 
+ * MVP uses a mock OCR response; production integrates OCR.space API.
+ */
+
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const axios = require('axios');
+const multer = require('multer');   // Middleware for handling multipart/form-data (file uploads)
+const axios = require('axios');     // HTTP client for external OCR API calls
 
-// Configure multer for file uploads
+// Configure multer: store uploads in memory (Buffer), limit to 5 MB, images only
 const storage = multer.memoryStorage();
 const upload = multer({ 
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB max
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
@@ -17,14 +27,17 @@ const upload = multer({
   }
 });
 
-// Medicine name patterns for extraction
+// Dictionary of common medicine names used for keyword extraction from OCR text
 const commonMedicines = [
   'paracetamol', 'dolo', 'crocin', 'amoxicillin', 'azithromycin',
   'insulin', 'metformin', 'aspirin', 'cetirizine', 'omeprazole',
   'ibuprofen', 'atorvastatin', 'vitamin', 'calpol', 'disprin'
 ];
 
-// Extract medicine names from text
+/**
+ * Scan OCR-extracted text for known medicine names, dosage patterns,
+ * and capitalized words (which often indicate drug brands).
+ */
 function extractMedicineNames(text) {
   const lowerText = text.toLowerCase();
   const found = [];

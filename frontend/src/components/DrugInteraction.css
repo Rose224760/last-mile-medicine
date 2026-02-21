@@ -1,0 +1,420 @@
+/* ── Drug Interaction Checker ────────────────────── */
+.drug-interaction {
+  background: hsl(var(--surface));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.di-header {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid hsl(var(--border));
+  user-select: none;
+}
+
+.di-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.di-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.di-subtitle {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.125rem;
+}
+
+.di-toggle {
+  background: none;
+  border: none;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.di-body {
+  padding: 1rem;
+}
+
+/* ── Inputs ── */
+.di-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.di-input-row {
+  position: relative;
+}
+
+.di-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.di-input-number {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+  color: white;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.di-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.di-input:focus {
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+}
+
+.di-remove-btn {
+  background: none;
+  border: none;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.25rem;
+  border-radius: var(--radius);
+  transition: color 0.15s;
+}
+
+.di-remove-btn:hover {
+  color: hsl(var(--destructive));
+}
+
+/* ── Suggestions ── */
+.di-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 2rem;
+  right: 0;
+  background: hsl(var(--surface));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 20;
+  max-height: 160px;
+  overflow-y: auto;
+  margin-top: 0.25rem;
+}
+
+.di-suggestion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.4375rem 0.75rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  color: hsl(var(--foreground));
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.di-suggestion-item:hover {
+  background: hsl(var(--accent));
+}
+
+.di-sug-name {
+  font-weight: 500;
+}
+
+.di-sug-generic {
+  font-size: 0.6875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+/* ── Actions ── */
+.di-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.di-add-btn {
+  padding: 0.375rem 0.75rem;
+  border: 1px dashed hsl(var(--border));
+  border-radius: var(--radius);
+  background: none;
+  color: hsl(var(--muted-foreground));
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.di-add-btn:hover {
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary));
+}
+
+.di-check-btn {
+  padding: 0.4375rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  background: hsl(var(--primary));
+  color: white;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-left: auto;
+}
+
+.di-check-btn:hover {
+  background: hsl(221 83% 46%);
+}
+
+.di-check-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Results ── */
+.di-results {
+  margin-top: 0.75rem;
+}
+
+.di-safe {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.75rem;
+  background: hsl(var(--success) / 0.08);
+  border: 1px solid hsl(var(--success) / 0.2);
+  border-radius: var(--radius);
+}
+
+.di-safe-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: hsl(var(--success));
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.di-safe-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.di-safe-text strong {
+  font-size: 0.8125rem;
+  color: hsl(var(--success));
+}
+
+.di-safe-text span {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.di-warning-header {
+  margin-bottom: 0.625rem;
+}
+
+.di-warning-count {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: hsl(var(--destructive));
+}
+
+/* ── Interaction Card ── */
+.di-interaction-card {
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  margin-bottom: 0.625rem;
+  overflow: hidden;
+}
+
+.di-interaction-card.severity-high {
+  border-color: hsl(var(--destructive) / 0.3);
+}
+
+.di-interaction-card.severity-moderate {
+  border-color: hsl(var(--warning) / 0.3);
+}
+
+.di-interaction-card.severity-low {
+  border-color: hsl(var(--primary) / 0.2);
+}
+
+.di-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 0.75rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.severity-high .di-card-header {
+  background: hsl(var(--destructive) / 0.06);
+}
+
+.severity-moderate .di-card-header {
+  background: hsl(var(--warning) / 0.06);
+}
+
+.severity-low .di-card-header {
+  background: hsl(var(--primary) / 0.04);
+}
+
+.di-drug-pair {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.di-drug-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.di-drug-separator {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+}
+
+.di-severity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.di-severity-badge.severity-high {
+  background: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
+}
+
+.di-severity-badge.severity-moderate {
+  background: hsl(var(--warning) / 0.1);
+  color: hsl(var(--warning));
+}
+
+.di-severity-badge.severity-low {
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+}
+
+.di-card-body {
+  padding: 0.625rem 0.75rem;
+}
+
+.di-effect {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.375rem;
+}
+
+.di-detail {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.di-recommendation {
+  display: flex;
+  gap: 0.375rem;
+  padding: 0.5rem;
+  background: hsl(var(--accent));
+  border-radius: calc(var(--radius) - 2px);
+  font-size: 0.75rem;
+}
+
+.di-rec-label {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+}
+
+.di-rec-text {
+  color: hsl(var(--muted-foreground));
+}
+
+.di-disclaimer {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.625rem;
+  background: hsl(var(--accent));
+  border-radius: var(--radius);
+  font-size: 0.6875rem;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.5;
+}
+
+/* ── Elder Mode Overrides ── */
+.elder-mode .di-title {
+  font-size: 1.25rem;
+}
+
+.elder-mode .di-input {
+  font-size: 1rem;
+  padding: 0.625rem 0.875rem;
+}
+
+.elder-mode .di-check-btn {
+  font-size: 1rem;
+  padding: 0.625rem 1.25rem;
+}
+
+.elder-mode .di-drug-name {
+  font-size: 1rem;
+}
+
+.elder-mode .di-effect {
+  font-size: 1rem;
+}
+
+.elder-mode .di-detail,
+.elder-mode .di-rec-text {
+  font-size: 0.875rem;
+}

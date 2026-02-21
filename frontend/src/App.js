@@ -1,9 +1,22 @@
+/**
+ * App.js — Root component for Last Mile Medicine
+ * 
+ * Manages top-level application state (pharmacies, search results,
+ * emergency/elder mode, health profile) and composes all feature
+ * components into the main user interface.
+ */
+
 import React, { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import PharmacyMap from './components/PharmacyMap';
 import PharmacyList from './components/PharmacyList';
 import EmergencyMode from './components/EmergencyMode';
+import ElderMode from './components/ElderMode';
 import PhotoUpload from './components/PhotoUpload';
+import HealthProfile from './components/HealthProfile';
+import MedicineDetail from './components/MedicineDetail';
+import DrugInteraction from './components/DrugInteraction';
+import UserDashboard, { addToSearchHistory } from './components/UserDashboard';
 import './App.css';
 
 function App() {
@@ -12,36 +25,42 @@ function App() {
   const [userLocation, setUserLocation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [emergencyMode, setEmergencyMode] = useState(false);
+  const [elderMode, setElderMode] = useState(false);
   const [showPhotoUpload, setShowPhotoUpload] = useState(false);
+  const [showHealthProfile, setShowHealthProfile] = useState(false);
+  const [healthProfile, setHealthProfile] = useState({
+    allergies: [],
+    ageGroup: 'adult',
+    pregnant: false,
+    conditions: [],
+  });
 
-  // Get user's location on mount
+  // Load health profile from localStorage on mount
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.log('Location error:', error);
-          // Default to Bangalore coordinates
-          setUserLocation({
-            lat: parseFloat(process.env.REACT_APP_DEFAULT_LAT),
-            lng: parseFloat(process.env.REACT_APP_DEFAULT_LNG)
-          });
-        }
-      );
-    } else {
-      // Default location
-      setUserLocation({
-        lat: parseFloat(process.env.REACT_APP_DEFAULT_LAT),
-        lng: parseFloat(process.env.REACT_APP_DEFAULT_LNG)
-      });
+    const stored = localStorage.getItem('healthProfile');
+    if (stored) {
+      try {
+        setHealthProfile(JSON.parse(stored));
+      } catch (e) {
+        console.error('Failed to load health profile:', e);
+      }
     }
   }, []);
 
+  // Set default location (Thrissur) on mount
+  useEffect(() => {
+    setUserLocation({
+      lat: parseFloat(process.env.REACT_APP_DEFAULT_LAT) || 10.5276,
+      lng: parseFloat(process.env.REACT_APP_DEFAULT_LNG) || 76.2144
+    });
+  }, []);
+
+  /**
+   * handleSearch — Fetch nearby pharmacies that stock the selected medicine.
+   * Calls the backend /api/pharmacies/nearby endpoint with user coordinates,
+   * search radius, and emergency flag. Results are sorted and filtered
+   * client-side when Emergency Mode is active.
+   */
   const handleSearch = async (medicine) => {
     if (!userLocation) return;
     
@@ -63,6 +82,9 @@ function App() {
       
       if (data.success) {
         let results = data.data;
+
+        // Track search history
+        addToSearchHistory(medicine.name);
         
         // Emergency Mode: Filter only open pharmacies
         if (emergencyMode) {
@@ -107,7 +129,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className={`App${elderMode ? ' elder-mode' : ''}`}>
       <header className="app-header">
         <nav className="header-nav">
           <div className="header-brand">
@@ -118,6 +140,21 @@ function App() {
             </div>
           </div>
           <div className="header-actions">
+            <span className="role-indicator">User</span>
+            <button
+              className={`health-profile-btn${healthProfile.allergies.length > 0 || healthProfile.conditions.length > 0 ? ' has-profile' : ''}`}
+              onClick={() => setShowHealthProfile(true)}
+              title="My Health Profile"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+              </svg>
+              <span>{elderMode ? '❤ Health' : 'Health'}</span>
+            </button>
+            <ElderMode
+              isActive={elderMode}
+              onToggle={() => setElderMode(!elderMode)}
+            />
             <EmergencyMode 
               isActive={emergencyMode}
               onToggle={handleEmergencyToggle}
@@ -128,14 +165,13 @@ function App() {
 
       <section className="hero-section">
         <div className="hero-content">
-          <h2 className="hero-title">Find Your Medicine in Seconds</h2>
+          <h2 className="hero-title">Find your medicine in seconds</h2>
           <p className="hero-subtitle">
-            Search nearby pharmacies with real-time availability, emergency access, 
-            and generic alternatives.
+            Search nearby pharmacies with real-time availability and generic alternatives.
           </p>
           <div className="hero-stats">
             <div className="stat-item">
-              <span className="stat-number">10,000+</span>
+              <span className="stat-number">10k+</span>
               <span className="stat-label">Pharmacies</span>
             </div>
             <div className="stat-item">
@@ -153,18 +189,18 @@ function App() {
       <main className="app-main">
         <div className="search-section">
           <div className="search-header">
-            <h3 className="search-title">Search Medicine</h3>
+            <h3 className="search-title">{elderMode ? '🔍 Search Medicine' : 'Search Medicine'}</h3>
             <div className="search-controls">
               <button 
                 className="photo-upload-btn"
                 onClick={() => setShowPhotoUpload(!showPhotoUpload)}
               >
-                {showPhotoUpload ? 'Hide Scanner' : 'Upload Prescription'}
+                {showPhotoUpload ? (elderMode ? '✕ Hide' : 'Hide Scanner') : (elderMode ? '📷 Upload' : 'Upload Prescription')}
               </button>
             </div>
           </div>
           
-          <SearchBar onSearch={handleSearch} />
+          <SearchBar onSearch={handleSearch} elderMode={elderMode} />
           
           {showPhotoUpload && (
             <div className="fade-in">
@@ -185,11 +221,23 @@ function App() {
           </div>
         )}
 
+        {selectedMedicine && !loading && (
+          <MedicineDetail
+            medicine={selectedMedicine}
+            healthProfile={healthProfile}
+            elderMode={elderMode}
+          />
+        )}
+
+        {selectedMedicine && !loading && (
+          <DrugInteraction elderMode={elderMode} />
+        )}
+
         {!loading && userLocation && (
           <div className="results-container fade-in">
             <div className="map-container">
               {emergencyMode && (
-                <div className="map-emergency-badge">🆘 Emergency: Auto-zoomed to closest</div>
+                <div className="map-emergency-badge">Emergency • Closest open pharmacies</div>
               )}
               <PharmacyMap 
                 pharmacies={pharmacies}
@@ -203,6 +251,7 @@ function App() {
                 pharmacies={pharmacies}
                 emergencyMode={emergencyMode}
                 selectedMedicine={selectedMedicine}
+                elderMode={elderMode}
               />
             </div>
           </div>
@@ -210,28 +259,34 @@ function App() {
 
         {!selectedMedicine && !loading && (
           <div className="welcome-state fade-in">
+            <UserDashboard
+              onSearch={handleSearch}
+              onOpenHealthProfile={() => setShowHealthProfile(true)}
+              onToggleEmergency={handleEmergencyToggle}
+              elderMode={elderMode}
+            />
             <div className="welcome-card">
-              <h2>How It Works</h2>
+              <h2>How it works</h2>
               <div className="features-grid">
                 <div className="feature">
-                  <span className="feature-icon">💊</span>
-                  <h3>Smart Search</h3>
-                  <p>Search by text or upload prescriptions with AI-powered recognition</p>
+                  <span className="feature-icon">{elderMode ? '🔍' : '•'}</span>
+                  <h3>Search</h3>
+                  <p>{elderMode ? 'Type or speak a medicine name' : 'Find medicines by name or upload a prescription'}</p>
                 </div>
                 <div className="feature">
-                  <span className="feature-icon">🗺️</span>
-                  <h3>Live Mapping</h3>
-                  <p>Real-time pharmacy locations with distance and availability</p>
+                  <span className="feature-icon">{elderMode ? '📍' : '•'}</span>
+                  <h3>Locate</h3>
+                  <p>{elderMode ? 'See nearby pharmacies on a map' : 'See pharmacies on a map with real-time availability'}</p>
                 </div>
                 <div className="feature">
-                  <span className="feature-icon">🚑</span>
-                  <h3>Emergency Mode</h3>
-                  <p>Filter open pharmacies with fastest routes for urgent needs</p>
+                  <span className="feature-icon">{elderMode ? '🚨' : '•'}</span>
+                  <h3>Emergency</h3>
+                  <p>{elderMode ? 'Find open pharmacies fast' : 'Filter open pharmacies with fastest routes'}</p>
                 </div>
                 <div className="feature">
-                  <span className="feature-icon">💰</span>
-                  <h3>Save Money</h3>
-                  <p>Generic alternatives and price comparison across pharmacies</p>
+                  <span className="feature-icon">{elderMode ? '💊' : '•'}</span>
+                  <h3>Compare</h3>
+                  <p>{elderMode ? 'Find cheaper alternatives' : 'Generic alternatives and price comparison'}</p>
                 </div>
               </div>
             </div>
@@ -243,13 +298,13 @@ function App() {
         <div className="footer-content">
           <div className="footer-section">
             <h3>Last Mile Medicine</h3>
-            <p>Making healthcare accessible for everyone.</p>
+            <p>Making healthcare accessible.</p>
           </div>
           <div className="footer-section">
             <h3>Platform</h3>
             <a href="/">For Users</a>
-            <a href="/">For Pharmacies</a>
-            <a href="/">Mobile App</a>
+            <a href="/pharmacy-dashboard.html">For Pharmacies</a>
+            <a href="/admin-dashboard.html">For Admins</a>
           </div>
           <div className="footer-section">
             <h3>Company</h3>
@@ -268,6 +323,14 @@ function App() {
           <p>&copy; 2026 Last Mile Medicine &middot; SDG 3: Good Health &amp; Well-Being</p>
         </div>
       </footer>
+
+      {showHealthProfile && (
+        <HealthProfile
+          profile={healthProfile}
+          onProfileChange={setHealthProfile}
+          onClose={() => setShowHealthProfile(false)}
+        />
+      )}
     </div>
   );
 }

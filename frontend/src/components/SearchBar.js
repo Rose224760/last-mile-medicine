@@ -1,10 +1,59 @@
-import React, { useState, useEffect } from 'react';
+/**
+ * SearchBar — Medicine search input with auto-complete suggestions
+ * 
+ * Features:
+ * - Live suggestions from the API as the user types (debounced at 2 chars)
+ * - Web Speech API voice input for hands-free / accessibility
+ * - Elder Mode styling with larger text and emoji hints
+ */
+
+import React, { useState, useEffect, useRef } from 'react';
 import './SearchBar.css';
 
-function SearchBar({ onSearch }) {
+function SearchBar({ onSearch, elderMode }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
+
+  // Initialize Web Speech API
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-IN';
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setSearchTerm(transcript);
+        setIsListening(false);
+      };
+
+      recognition.onerror = () => {
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
+  const toggleVoiceSearch = () => {
+    if (!recognitionRef.current) return;
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
 
   useEffect(() => {
     if (searchTerm.length >= 2) {
@@ -46,12 +95,12 @@ function SearchBar({ onSearch }) {
   return (
     <div className="search-bar-container">
       <form onSubmit={handleSubmit} className="search-form">
-        <div className="search-input-wrapper">
-          <span className="search-icon">🔍</span>
+        <div className={`search-input-wrapper${elderMode ? ' elder' : ''}`}>
+          <span className="search-icon">{elderMode ? '🔍' : '⌕'}</span>
           <input
             type="text"
             className="search-input"
-            placeholder="Search medicine name (e.g., Paracetamol, Insulin...)"
+            placeholder={elderMode ? 'Type or speak medicine name...' : 'Search medicine name (e.g., Paracetamol, Insulin...)'}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
@@ -68,6 +117,19 @@ function SearchBar({ onSearch }) {
               ✕
             </button>
           )}
+          <button
+            type="button"
+            className={`voice-btn${isListening ? ' listening' : ''}`}
+            onClick={toggleVoiceSearch}
+            title={isListening ? 'Listening...' : 'Voice search'}
+            aria-label="Voice search"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <line x1="12" y1="19" x2="12" y2="22" />
+            </svg>
+          </button>
         </div>
         
         {showSuggestions && suggestions.length > 0 && (

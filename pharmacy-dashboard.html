@@ -3,338 +3,1131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pharmacy Dashboard - Last Mile Medicine</title>
+    <title>Pharmacy Dashboard — Last Mile Medicine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        /* ── Design Tokens ────────────────────────────── */
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #dbeafe;
+            --success: #16a34a;
+            --success-light: #dcfce7;
+            --warning: #eab308;
+            --warning-light: #fef9c3;
+            --destructive: #dc2626;
+            --destructive-light: #fee2e2;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --radius: 0.5rem;
+            --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #f9fafb;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            line-height: 1.5;
         }
-        
-        .dashboard-header {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-        
-        .dashboard-header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-        }
-        
-        .stat-card h3 {
-            color: #6b7280;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #1f2937;
-        }
-        
-        .main-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-        
-        .card-header {
+
+        /* ── Layout ───────────────────────────────────── */
+        .login-wrapper {
+            min-height: 100vh;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .login-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            max-width: 420px;
+            width: 100%;
+            padding: 2rem;
+        }
+        .login-card h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: .25rem;
+        }
+        .login-card p.sub {
+            color: var(--text-muted);
+            font-size: .875rem;
             margin-bottom: 1.5rem;
         }
-        
-        .card-header h2 {
-            color: #1f2937;
+        .login-card label {
+            display: block;
+            font-size: .8125rem;
+            font-weight: 500;
+            margin-bottom: .375rem;
+            color: var(--text-muted);
         }
-        
-        .status-toggle {
+        .login-card select,
+        .login-card input[type="password"] {
+            width: 100%;
+            padding: .5rem .75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: .875rem;
+            font-family: inherit;
+            margin-bottom: 1rem;
+            outline: none;
+            background: var(--bg);
+        }
+        .login-card select:focus,
+        .login-card input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .app-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: .75rem 1.5rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
-        }
-        
-        .toggle-switch {
-            position: relative;
-            width: 60px;
-            height: 30px;
-        }
-        
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 30px;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .slider {
-            background-color: #10b981;
-        }
-        
-        input:checked + .slider:before {
-            transform: translateX(30px);
-        }
-        
-        .medicine-grid {
-            display: grid;
-            gap: 1rem;
-        }
-        
-        .medicine-item {
-            display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border: 2px solid #f3f4f6;
-            border-radius: 10px;
-            transition: all 0.2s;
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
-        
-        .medicine-item:hover {
-            border-color: #10b981;
-            background: #f0fdf4;
-        }
-        
-        .medicine-info h4 {
-            color: #1f2937;
-            margin-bottom: 0.25rem;
-        }
-        
-        .medicine-meta {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-        
-        .stock-controls {
+        .app-header .brand {
             display: flex;
-            gap: 0.5rem;
             align-items: center;
+            gap: .5rem;
+            font-weight: 700;
+            font-size: 1rem;
         }
-        
+        .app-header .brand svg { color: var(--primary); }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .pharmacy-badge {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: .25rem .75rem;
+            border-radius: 999px;
+            font-size: .75rem;
+            font-weight: 600;
+        }
+        .logout-btn {
+            background: none;
+            border: 1px solid var(--border);
+            padding: .375rem .75rem;
+            border-radius: var(--radius);
+            font-size: .8125rem;
+            cursor: pointer;
+            font-family: inherit;
+            color: var(--text-muted);
+        }
+        .logout-btn:hover { background: var(--bg); }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* ── Tabs ─────────────────────────────────────── */
+        .tab-bar {
+            display: flex;
+            gap: .25rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+        .tab-btn {
+            padding: .625rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: .875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            transition: all .15s;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active {
+            color: var(--primary-dark);
+            border-bottom-color: var(--primary);
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── Stats ─────────────────────────────────────── */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: .75rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+        }
+        .stat-label {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: .25rem;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .stat-value.green { color: var(--success); }
+        .stat-value.red { color: var(--destructive); }
+        .stat-value.blue { color: var(--primary); }
+
+        /* ── Card ──────────────────────────────────────── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.25rem;
+        }
+        .card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .875rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .card-head h2 {
+            font-size: .9375rem;
+            font-weight: 600;
+        }
+        .card-body { padding: 1rem; }
+
+        /* ── Toggle Switch ─────────────────────────────── */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .625rem 0;
+        }
+        .toggle-row + .toggle-row { border-top: 1px solid var(--border); }
+        .toggle-label { font-size: .875rem; font-weight: 500; }
+        .toggle-desc { font-size: .75rem; color: var(--text-muted); }
+
+        .switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        .switch input { opacity:0; width:0; height:0; }
+        .switch .rail {
+            position: absolute;
+            inset: 0;
+            background: #cbd5e1;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .switch .rail::after {
+            content: '';
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform .2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,.15);
+        }
+        .switch input:checked + .rail {
+            background: var(--primary);
+        }
+        .switch input:checked + .rail::after {
+            transform: translateX(20px);
+        }
+
+        /* ── Hours Input ───────────────────────────────── */
+        .hours-grid {
+            display: flex;
+            gap: .75rem;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+        .hours-grid .field {
+            display: flex;
+            flex-direction: column;
+            gap: .25rem;
+        }
+        .hours-grid label {
+            font-size: .75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+        .hours-grid input[type="time"] {
+            padding: .375rem .5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: .875rem;
+        }
+
+        /* ── Medicine List ─────────────────────────────── */
+        .med-filter {
+            display: flex;
+            gap: .5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .med-filter input {
+            flex: 1;
+            min-width: 180px;
+            padding: .5rem .75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: .875rem;
+            outline: none;
+        }
+        .med-filter input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        .filter-chip {
+            padding: .375rem .75rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            font-size: .8125rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all .15s;
+        }
+        .filter-chip:hover,
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .med-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .625rem .75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: .5rem;
+            transition: border-color .15s;
+        }
+        .med-row:hover { border-color: var(--primary); }
+        .med-name { font-weight: 600; font-size: .875rem; }
+        .med-meta { font-size: .75rem; color: var(--text-muted); }
+        .med-actions { display: flex; align-items: center; gap: .5rem; }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            padding: .25rem .625rem;
+            border-radius: 999px;
+            font-size: .75rem;
+            font-weight: 600;
+        }
+        .badge-in { background: var(--success-light); color: var(--success); }
+        .badge-out { background: var(--destructive-light); color: var(--destructive); }
+        .badge-trusted {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        /* ── Buttons ───────────────────────────────────── */
         .btn {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: .375rem;
+            padding: .5rem 1rem;
+            border-radius: var(--radius);
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: .8125rem;
+            font-weight: 600;
+            transition: all .15s;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline {
+            background: var(--surface);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover { background: var(--bg); }
+        .btn-sm { padding: .25rem .5rem; font-size: .75rem; }
+        .btn-toggle {
+            min-width: 80px;
+            justify-content: center;
+        }
+        .btn-toggle.in {
+            background: var(--success);
+            color: white;
+        }
+        .btn-toggle.out {
+            background: var(--destructive);
+            color: white;
+        }
+
+        /* ── Toast ─────────────────────────────────────── */
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--text);
+            color: white;
+            padding: .75rem 1.25rem;
+            border-radius: var(--radius);
+            font-size: .875rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-md);
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all .25s;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Admin Medicine Modal ──────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.4);
+            z-index: 80;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            max-width: 520px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-head h3 { font-size: 1rem; font-weight: 600; }
+        .modal-close {
+            background: none;
             border: none;
             cursor: pointer;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            line-height: 1;
+        }
+        .modal-body { padding: 1rem; }
+        .modal-body .field { margin-bottom: .75rem; }
+        .modal-body .field label {
+            display: block;
+            font-size: .8125rem;
+            font-weight: 500;
+            margin-bottom: .25rem;
+            color: var(--text-muted);
+        }
+        .modal-body .field input,
+        .modal-body .field select,
+        .modal-body .field textarea {
+            width: 100%;
+            padding: .5rem .75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: .875rem;
+            outline: none;
+        }
+        .modal-body .field textarea { resize: vertical; min-height: 60px; }
+        .modal-body .field input:focus,
+        .modal-body .field select:focus,
+        .modal-body .field textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        .modal-foot {
+            display: flex;
+            justify-content: flex-end;
+            gap: .5rem;
+            padding: .75rem 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── Last Updated Banner ───────────────────────── */
+        .last-updated {
+            font-size: .75rem;
+            color: var(--text-muted);
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+        .last-updated strong { color: var(--success); }
+
+        /* ── Hybrid Data Indicators ────────────────────── */
+        .data-source {
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            font-size: .6875rem;
+            padding: .125rem .5rem;
+            border-radius: 999px;
             font-weight: 600;
-            transition: all 0.2s;
         }
-        
-        .btn-success {
-            background: #10b981;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #059669;
-        }
-        
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-        
-        .stock-badge {
-            padding: 0.375rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-        
-        .in-stock {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        
-        .out-of-stock {
-            background: #fee2e2;
-            color: #991b1b;
+        .data-source.trusted { background: #dbeafe; color: #1d4ed8; }
+        .data-source.pharmacy { background: #dcfce7; color: #15803d; }
+        .data-source.crowd    { background: #fef9c3; color: #a16207; }
+
+        /* ── Responsive ────────────────────────────────── */
+        @media (max-width: 640px) {
+            .container { padding: 1rem; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .med-row { flex-direction: column; align-items: flex-start; gap: .5rem; }
+            .med-actions { width: 100%; justify-content: flex-end; }
+            .hours-grid { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <div class="dashboard-header">
-        <h1>🏥 Pharmacy Dashboard</h1>
-        <p>Last Mile Medicine Partner Portal</p>
+
+<!-- ── LOGIN SCREEN ─────────────────────────────────────── -->
+<div id="loginScreen" class="login-wrapper">
+    <div class="login-card">
+        <h1>Pharmacy Dashboard</h1>
+        <p class="sub">Last Mile Medicine — Partner Portal</p>
+
+        <label for="pharmacySelect">Select your pharmacy</label>
+        <select id="pharmacySelect">
+            <option value="">Choose…</option>
+        </select>
+
+        <label for="pinInput">PIN</label>
+        <input type="password" id="pinInput" placeholder="Enter PIN (demo: 1234)" maxlength="6">
+
+        <button class="btn btn-primary" style="width:100%; margin-top:.5rem;" onclick="doLogin()">
+            Sign In
+        </button>
+        <p id="loginError" style="color:var(--destructive);font-size:.8125rem;margin-top:.5rem;display:none;"></p>
     </div>
-    
-    <div class="container">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Total Medicines</h3>
-                <div class="stat-value" id="totalMeds">14</div>
-            </div>
-            <div class="stat-card">
-                <h3>In Stock</h3>
-                <div class="stat-value" style="color: #10b981;" id="inStock">11</div>
-            </div>
-            <div class="stat-card">
-                <h3>Out of Stock</h3>
-                <div class="stat-value" style="color: #ef4444;" id="outStock">3</div>
-            </div>
-            <div class="stat-card">
-                <h3>Today's Searches</h3>
-                <div class="stat-value" style="color: #3b82f6;" id="searches">47</div>
-            </div>
+</div>
+
+<!-- ── MAIN DASHBOARD ───────────────────────────────────── -->
+<div id="dashboardScreen" style="display:none;">
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="brand">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M12 11v5"/><path d="M9.5 13.5h5"/><rect x="3" y="4" width="18" height="18" rx="2"/></svg>
+            Last Mile Medicine
         </div>
-        
-        <div class="main-card">
-            <div class="card-header">
-                <h2>Stock Management</h2>
-                <div class="status-toggle">
-                    <span>Store Status:</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="storeStatus" checked>
-                        <span class="slider"></span>
-                    </label>
-                    <strong id="statusText" style="color: #10b981;">Open</strong>
+        <div class="header-right">
+            <span class="pharmacy-badge" id="headerPharmacyName"></span>
+            <a href="index.html" class="logout-btn" style="text-decoration:none;">&larr; Portal</a>
+            <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Last Updated -->
+        <div class="last-updated" id="lastUpdatedBar"></div>
+
+        <!-- Tabs -->
+        <div class="tab-bar">
+            <button class="tab-btn active" data-tab="stock">Stock Management</button>
+            <button class="tab-btn" data-tab="settings">Hours &amp; Delivery</button>
+            <button class="tab-btn" data-tab="admin">Medicine Admin</button>
+        </div>
+
+        <!-- ───────── TAB: STOCK ───────── -->
+        <div id="tab-stock" class="tab-panel active">
+            <div class="stats" id="statsGrid"></div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>Inventory</h2>
+                    <div style="display:flex;gap:.5rem;align-items:center;">
+                        <span class="data-source trusted">Trusted Source</span>
+                        <span class="data-source pharmacy">Pharmacy Input</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="med-filter">
+                        <input type="text" id="stockSearch" placeholder="Search medicines…">
+                        <button class="filter-chip active" data-filter="all" onclick="setFilter('all',this)">All</button>
+                        <button class="filter-chip" data-filter="in" onclick="setFilter('in',this)">In Stock</button>
+                        <button class="filter-chip" data-filter="out" onclick="setFilter('out',this)">Out of Stock</button>
+                    </div>
+                    <div id="stockList"></div>
                 </div>
             </div>
-            
-            <div class="medicine-grid" id="medicineList"></div>
         </div>
-    </div>
-    
-    <script>
-        // Sample medicines data
-        const medicines = [
-            { id: 1, name: 'Paracetamol', category: 'Pain Relief', price: 30, inStock: true },
-            { id: 2, name: 'Dolo-650', category: 'Pain Relief', price: 35, inStock: true },
-            { id: 3, name: 'Insulin', category: 'Diabetes', price: 800, inStock: true },
-            { id: 4, name: 'Amoxicillin', category: 'Antibiotic', price: 120, inStock: false },
-            { id: 5, name: 'Vitamin D', category: 'Vitamin', price: 60, inStock: true },
-            { id: 6, name: 'Crocin', category: 'Pain Relief', price: 32, inStock: true },
-            { id: 7, name: 'Azithromycin', category: 'Antibiotic', price: 150, inStock: false },
-            { id: 8, name: 'Metformin', category: 'Diabetes', price: 45, inStock: true },
-            { id: 9, name: 'Cetirizine', category: 'Antihistamine', price: 40, inStock: true },
-            { id: 10, name: 'Omeprazole', category: 'Antacid', price: 55, inStock: false },
-            { id: 11, name: 'Aspirin', category: 'Blood Thinner', price: 25, inStock: true },
-            { id: 12, name: 'Ibuprofen', category: 'Pain Relief', price: 45, inStock: true },
-            { id: 13, name: 'Vitamin C', category: 'Vitamin', price: 35, inStock: true },
-            { id: 14, name: 'Atorvastatin', category: 'Cholesterol', price: 90, inStock: true }
-        ];
-        
-        function renderMedicines() {
-            const list = document.getElementById('medicineList');
-            list.innerHTML = '';
-            
-            medicines.forEach(med => {
-                const item = document.createElement('div');
-                item.className = 'medicine-item';
-                item.innerHTML = `
-                    <div class="medicine-info">
-                        <h4>${med.name}</h4>
-                        <div class="medicine-meta">
-                            ${med.category} • ₹${med.price}
+
+        <!-- ───────── TAB: SETTINGS ───────── -->
+        <div id="tab-settings" class="tab-panel">
+            <div class="card">
+                <div class="card-head"><h2>Store Settings</h2></div>
+                <div class="card-body">
+
+                    <div class="toggle-row">
+                        <div>
+                            <div class="toggle-label">Store Open</div>
+                            <div class="toggle-desc">Toggle to show your store as open/closed to users</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="toggleOpen" onchange="saveSettings()">
+                            <span class="rail"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div>
+                            <div class="toggle-label">24-Hour Service</div>
+                            <div class="toggle-desc">Mark your pharmacy as 24x7</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="toggle24h" onchange="saveSettings()">
+                            <span class="rail"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div>
+                            <div class="toggle-label">Home Delivery</div>
+                            <div class="toggle-desc">Show delivery option to nearby users</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="toggleDelivery" onchange="saveSettings()">
+                            <span class="rail"></span>
+                        </label>
+                    </div>
+
+                    <div style="border-top:1px solid var(--border);margin-top:1rem;padding-top:1rem;">
+                        <div class="toggle-label" style="margin-bottom:.75rem;">Operating Hours</div>
+                        <div class="hours-grid">
+                            <div class="field">
+                                <label>Open</label>
+                                <input type="time" id="openTime">
+                            </div>
+                            <div class="field">
+                                <label>Close</label>
+                                <input type="time" id="closeTime">
+                            </div>
+                            <button class="btn btn-primary" onclick="saveSettings()">Save Hours</button>
                         </div>
                     </div>
-                    <div class="stock-controls">
-                        <span class="stock-badge ${med.inStock ? 'in-stock' : 'out-of-stock'}">
-                            ${med.inStock ? '✓ In Stock' : '✗ Out of Stock'}
-                        </span>
-                        <button class="btn ${med.inStock ? 'btn-danger' : 'btn-success'}" 
-                                onclick="toggleStock(${med.id})">
-                            ${med.inStock ? 'Mark Out' : 'Mark In'}
-                        </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head"><h2>Data Trust Score</h2></div>
+                <div class="card-body">
+                    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+                        <div>
+                            <div class="stat-label">Reliability Score</div>
+                            <div class="stat-value blue" id="reliabilityVal">—</div>
+                        </div>
+                        <div>
+                            <div class="stat-label">Data Source</div>
+                            <div style="display:flex;gap:.375rem;margin-top:.375rem;">
+                                <span class="data-source trusted">Trusted</span>
+                                <span class="data-source pharmacy">Self-report</span>
+                                <span class="data-source crowd">Crowd</span>
+                            </div>
+                        </div>
                     </div>
-                `;
-                list.appendChild(item);
-            });
-            
-            updateStats();
-        }
-        
-        function toggleStock(id) {
-            const med = medicines.find(m => m.id === id);
-            if (med) {
-                med.inStock = !med.inStock;
-                renderMedicines();
-            }
-        }
-        
-        function updateStats() {
-            const inStock = medicines.filter(m => m.inStock).length;
-            const outStock = medicines.filter(m => !m.inStock).length;
-            
-            document.getElementById('totalMeds').textContent = medicines.length;
-            document.getElementById('inStock').textContent = inStock;
-            document.getElementById('outStock').textContent = outStock;
-            document.getElementById('searches').textContent = Math.floor(Math.random() * 50) + 30;
-        }
-        
-        document.getElementById('storeStatus').addEventListener('change', function() {
-            const statusText = document.getElementById('statusText');
-            if (this.checked) {
-                statusText.textContent = 'Open';
-                statusText.style.color = '#10b981';
-            } else {
-                statusText.textContent = 'Closed';
-                statusText.style.color = '#ef4444';
-            }
+                    <p style="font-size:.75rem;color:var(--text-muted);margin-top:.75rem;">
+                        The hybrid data model combines <strong>trusted sources</strong> (government registries, official databases),
+                        <strong>pharmacy self-reported</strong> stock &amp; hours, and <strong>crowd-validated</strong> community reports.
+                        Higher reliability scores improve your visibility in search results.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ───────── TAB: ADMIN ─────────── -->
+        <div id="tab-admin" class="tab-panel">
+            <div class="card">
+                <div class="card-head">
+                    <h2>Medicine Catalog</h2>
+                    <button class="btn btn-primary btn-sm" onclick="openAddMedModal()">+ Add Medicine</button>
+                </div>
+                <div class="card-body">
+                    <div class="med-filter">
+                        <input type="text" id="adminSearch" placeholder="Search catalog…" oninput="renderAdminList()">
+                    </div>
+                    <div id="adminList"></div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- .container -->
+</div><!-- dashboardScreen -->
+
+<!-- ── Add/Edit Medicine Modal ───────────────────────────── -->
+<div class="modal-overlay" id="medModal">
+    <div class="modal">
+        <div class="modal-head">
+            <h3 id="medModalTitle">Add Medicine</h3>
+            <button class="modal-close" onclick="closeMedModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editMedId">
+            <div class="field">
+                <label>Name *</label>
+                <input id="medName">
+            </div>
+            <div class="field">
+                <label>Generic Name *</label>
+                <input id="medGeneric">
+            </div>
+            <div class="field">
+                <label>Category *</label>
+                <input id="medCategory" placeholder="e.g. Pain Relief, Antibiotic">
+            </div>
+            <div class="field">
+                <label>Brand Names (comma-separated)</label>
+                <input id="medBrands" placeholder="Brand1, Brand2">
+            </div>
+            <div class="field">
+                <label>Avg. Price (₹)</label>
+                <input id="medPrice" type="number" min="0">
+            </div>
+            <div class="field">
+                <label>Common Uses (comma-separated)</label>
+                <input id="medUses" placeholder="Fever, Headache">
+            </div>
+            <div class="field">
+                <label>Composition (comma-separated)</label>
+                <input id="medComposition" placeholder="Paracetamol 500mg">
+            </div>
+            <div class="field">
+                <label>Drug Class</label>
+                <input id="medDrugClass" placeholder="e.g. Analgesic / Antipyretic">
+            </div>
+            <div class="field">
+                <label>Requires Prescription</label>
+                <select id="medRx">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn btn-outline" onclick="closeMedModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveMedicine()">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Toast ─────────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'http://localhost:5000/api';
+
+// ── State ────────────────────────────────────────────────
+let currentPharmacy = null;
+let allMedicines = [];
+let stockFilter = 'all';
+
+// ── Login ────────────────────────────────────────────────
+async function loadPharmacies() {
+    try {
+        const res = await fetch(`${API}/pharmacies`);
+        const json = await res.json();
+        const sel = document.getElementById('pharmacySelect');
+        json.data.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = `${p.name} — ${p.address}`;
+            sel.appendChild(opt);
         });
-        
-        // Initial render
-        renderMedicines();
-        
-        // Simulate live updates every 10 seconds
-        setInterval(() => {
-            document.getElementById('searches').textContent = Math.floor(Math.random() * 50) + 30;
-        }, 10000);
-    </script>
+    } catch(e) {
+        console.error('Failed to load pharmacies', e);
+    }
+}
+
+function doLogin() {
+    const id = document.getElementById('pharmacySelect').value;
+    const pin = document.getElementById('pinInput').value;
+    const err = document.getElementById('loginError');
+
+    if (!id) { err.textContent = 'Please select a pharmacy'; err.style.display = 'block'; return; }
+    if (pin !== '1234') { err.textContent = 'Invalid PIN (hint: 1234)'; err.style.display = 'block'; return; }
+
+    err.style.display = 'none';
+    currentPharmacy = id;
+    localStorage.setItem('dashPharmacy', id);
+
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboardScreen').style.display = 'block';
+    initDashboard();
+}
+
+function doLogout() {
+    localStorage.removeItem('dashPharmacy');
+    currentPharmacy = null;
+    document.getElementById('dashboardScreen').style.display = 'none';
+    document.getElementById('loginScreen').style.display = '';
+}
+
+// Restore session
+(async function boot() {
+    await loadPharmacies();
+    const saved = localStorage.getItem('dashPharmacy');
+    if (saved) {
+        currentPharmacy = saved;
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboardScreen').style.display = 'block';
+        initDashboard();
+    }
+})();
+
+// ── Dashboard Init ───────────────────────────────────────
+async function initDashboard() {
+    // Load pharmacy details
+    const phRes = await fetch(`${API}/pharmacies/${currentPharmacy}`);
+    const phJson = await phRes.json();
+    const ph = phJson.data;
+
+    document.getElementById('headerPharmacyName').textContent = ph.name;
+
+    // Settings
+    document.getElementById('toggleOpen').checked = ph.isOpen;
+    document.getElementById('toggle24h').checked = ph.is24Hours;
+    document.getElementById('toggleDelivery').checked = ph.hasDelivery;
+    document.getElementById('openTime').value = ph.openTime;
+    document.getElementById('closeTime').value = ph.closeTime;
+    document.getElementById('reliabilityVal').textContent = ph.reliabilityScore + ' / 5';
+
+    // Last updated
+    const updated = ph.lastUpdated ? new Date(ph.lastUpdated).toLocaleString() : '—';
+    document.getElementById('lastUpdatedBar').innerHTML =
+        `Last synced: <strong>${updated}</strong>`;
+
+    // Load medicines catalog
+    const medRes = await fetch(`${API}/medicines`);
+    const medJson = await medRes.json();
+    allMedicines = medJson.data;
+
+    renderStock(ph);
+    renderAdminList();
+    loadStats();
+}
+
+// ── Stats ────────────────────────────────────────────────
+async function loadStats() {
+    const res = await fetch(`${API}/pharmacies/${currentPharmacy}/stats`);
+    const json = await res.json();
+    const s = json.data;
+    document.getElementById('statsGrid').innerHTML = `
+        <div class="stat"><div class="stat-label">Total Catalog</div><div class="stat-value">${s.totalCatalog}</div></div>
+        <div class="stat"><div class="stat-label">In Stock</div><div class="stat-value green">${s.inStock}</div></div>
+        <div class="stat"><div class="stat-label">Out of Stock</div><div class="stat-value red">${s.outOfStock}</div></div>
+        <div class="stat"><div class="stat-label">Reliability</div><div class="stat-value blue">${s.reliabilityScore}/5</div></div>
+    `;
+}
+
+// ── Stock Rendering ──────────────────────────────────────
+function renderStock(pharmacyData) {
+    const search = document.getElementById('stockSearch').value.toLowerCase();
+    const list = document.getElementById('stockList');
+    list.innerHTML = '';
+
+    // Get pharmacy's in-stock list
+    const inStockSet = new Set((pharmacyData || {}).medicines || []);
+
+    // Fetch fresh pharmacy data for stock if not passed
+    const meds = allMedicines.filter(m => {
+        const matchSearch = !search || m.name.toLowerCase().includes(search) ||
+            m.genericName.toLowerCase().includes(search);
+        const isIn = inStockSet.has(m.name.toLowerCase()) ||
+            inStockSet.has(m.genericName.toLowerCase()) ||
+            m.brandNames.some(b => inStockSet.has(b.toLowerCase()));
+        if (stockFilter === 'in') return matchSearch && isIn;
+        if (stockFilter === 'out') return matchSearch && !isIn;
+        return matchSearch;
+    });
+
+    if (meds.length === 0) {
+        list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:2rem;">No medicines match your filter.</p>';
+        return;
+    }
+
+    meds.forEach(m => {
+        const isIn = inStockSet.has(m.name.toLowerCase()) ||
+            inStockSet.has(m.genericName.toLowerCase()) ||
+            m.brandNames.some(b => inStockSet.has(b.toLowerCase()));
+
+        const row = document.createElement('div');
+        row.className = 'med-row';
+        row.innerHTML = `
+            <div>
+                <div class="med-name">${m.name}</div>
+                <div class="med-meta">${m.genericName} · ${m.category} · ₹${m.avgPrice}</div>
+            </div>
+            <div class="med-actions">
+                <span class="badge ${isIn ? 'badge-in' : 'badge-out'}">${isIn ? 'In Stock' : 'Out'}</span>
+                <button class="btn btn-sm btn-toggle ${isIn ? 'out' : 'in'}"
+                    onclick="toggleStock('${m.name.toLowerCase()}', ${!isIn})">
+                    ${isIn ? 'Mark Out' : 'Mark In'}
+                </button>
+            </div>
+        `;
+        list.appendChild(row);
+    });
+}
+
+async function toggleStock(medName, setIn) {
+    try {
+        await fetch(`${API}/pharmacies/${currentPharmacy}/stock/toggle`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ medicine: medName, inStock: setIn })
+        });
+        toast(setIn ? 'Marked in stock' : 'Marked out of stock');
+        // Reload
+        const phRes = await fetch(`${API}/pharmacies/${currentPharmacy}`);
+        const phJson = await phRes.json();
+        renderStock(phJson.data);
+        loadStats();
+    } catch(e) {
+        toast('Failed to update stock');
+    }
+}
+
+function setFilter(f, el) {
+    stockFilter = f;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    // re-render with current data
+    fetch(`${API}/pharmacies/${currentPharmacy}`)
+        .then(r => r.json())
+        .then(j => renderStock(j.data));
+}
+
+// Search handler
+document.addEventListener('DOMContentLoaded', () => {
+    const stockSearch = document.getElementById('stockSearch');
+    if (stockSearch) {
+        stockSearch.addEventListener('input', async () => {
+            const phRes = await fetch(`${API}/pharmacies/${currentPharmacy}`);
+            const phJson = await phRes.json();
+            renderStock(phJson.data);
+        });
+    }
+});
+
+// ── Settings ─────────────────────────────────────────────
+async function saveSettings() {
+    const body = {
+        is24Hours: document.getElementById('toggle24h').checked,
+        hasDelivery: document.getElementById('toggleDelivery').checked,
+        openTime: document.getElementById('openTime').value,
+        closeTime: document.getElementById('closeTime').value
+    };
+
+    try {
+        await fetch(`${API}/pharmacies/${currentPharmacy}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        toast('Settings saved');
+    } catch(e) {
+        toast('Failed to save');
+    }
+}
+
+// ── Admin Medicine List ──────────────────────────────────
+function renderAdminList() {
+    const search = (document.getElementById('adminSearch')?.value || '').toLowerCase();
+    const list = document.getElementById('adminList');
+    if (!list) return;
+    list.innerHTML = '';
+
+    const filtered = allMedicines.filter(m =>
+        !search || m.name.toLowerCase().includes(search) || m.genericName.toLowerCase().includes(search)
+    );
+
+    if (filtered.length === 0) {
+        list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:1rem;">No medicines found.</p>';
+        return;
+    }
+
+    filtered.forEach(m => {
+        const row = document.createElement('div');
+        row.className = 'med-row';
+        row.innerHTML = `
+            <div>
+                <div class="med-name">${m.name} <span class="data-source trusted" style="margin-left:.375rem;">Trusted</span></div>
+                <div class="med-meta">${m.genericName} · ${m.category} · ${m.drugClass || '—'} · ₹${m.avgPrice}
+                    ${m.requiresPrescription ? ' · <strong style="color:var(--warning)">Rx</strong>' : ''}</div>
+            </div>
+            <div class="med-actions">
+                <button class="btn btn-outline btn-sm" onclick='openEditMedModal("${m.id}")'>Edit</button>
+                <button class="btn btn-sm" style="color:var(--destructive)" onclick='deleteMedicine("${m.id}")'>Delete</button>
+            </div>
+        `;
+        list.appendChild(row);
+    });
+}
+
+// ── Admin Modal ──────────────────────────────────────────
+function openAddMedModal() {
+    document.getElementById('medModalTitle').textContent = 'Add Medicine';
+    document.getElementById('editMedId').value = '';
+    document.getElementById('medName').value = '';
+    document.getElementById('medGeneric').value = '';
+    document.getElementById('medCategory').value = '';
+    document.getElementById('medBrands').value = '';
+    document.getElementById('medPrice').value = '';
+    document.getElementById('medUses').value = '';
+    document.getElementById('medComposition').value = '';
+    document.getElementById('medDrugClass').value = '';
+    document.getElementById('medRx').value = 'false';
+    document.getElementById('medModal').classList.add('open');
+}
+
+function openEditMedModal(id) {
+    const m = allMedicines.find(x => x.id === id);
+    if (!m) return;
+    document.getElementById('medModalTitle').textContent = 'Edit Medicine';
+    document.getElementById('editMedId').value = m.id;
+    document.getElementById('medName').value = m.name;
+    document.getElementById('medGeneric').value = m.genericName;
+    document.getElementById('medCategory').value = m.category;
+    document.getElementById('medBrands').value = (m.brandNames || []).join(', ');
+    document.getElementById('medPrice').value = m.avgPrice || '';
+    document.getElementById('medUses').value = (m.commonUses || []).join(', ');
+    document.getElementById('medComposition').value = (m.composition || []).join(', ');
+    document.getElementById('medDrugClass').value = m.drugClass || '';
+    document.getElementById('medRx').value = m.requiresPrescription ? 'true' : 'false';
+    document.getElementById('medModal').classList.add('open');
+}
+
+function closeMedModal() {
+    document.getElementById('medModal').classList.remove('open');
+}
+
+async function saveMedicine() {
+    const id = document.getElementById('editMedId').value;
+    const split = v => v ? v.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const body = {
+        name: document.getElementById('medName').value.trim(),
+        genericName: document.getElementById('medGeneric').value.trim(),
+        category: document.getElementById('medCategory').value.trim(),
+        brandNames: split(document.getElementById('medBrands').value),
+        avgPrice: parseFloat(document.getElementById('medPrice').value) || 0,
+        commonUses: split(document.getElementById('medUses').value),
+        composition: split(document.getElementById('medComposition').value),
+        drugClass: document.getElementById('medDrugClass').value.trim(),
+        requiresPrescription: document.getElementById('medRx').value === 'true'
+    };
+
+    if (!body.name || !body.genericName || !body.category) {
+        toast('Name, Generic Name, and Category are required');
+        return;
+    }
+
+    try {
+        if (id) {
+            // Update
+            await fetch(`${API}/medicines/admin/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            toast('Medicine updated');
+        } else {
+            // Add
+            await fetch(`${API}/medicines/admin/add`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            toast('Medicine added');
+        }
+
+        closeMedModal();
+        // Reload catalog
+        const res = await fetch(`${API}/medicines`);
+        const json = await res.json();
+        allMedicines = json.data;
+        renderAdminList();
+        loadStats();
+    } catch(e) {
+        toast('Save failed');
+    }
+}
+
+async function deleteMedicine(id) {
+    if (!confirm('Remove this medicine from the catalog?')) return;
+
+    try {
+        await fetch(`${API}/medicines/admin/${id}`, { method: 'DELETE' });
+        toast('Medicine removed');
+        const res = await fetch(`${API}/medicines`);
+        const json = await res.json();
+        allMedicines = json.data;
+        renderAdminList();
+        loadStats();
+    } catch(e) {
+        toast('Delete failed');
+    }
+}
+
+// ── Tabs ─────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+});
+
+// ── Toast ────────────────────────────────────────────────
+function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2200);
+}
+</script>
 </body>
 </html>

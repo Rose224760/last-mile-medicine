@@ -8,9 +8,8 @@ function EmergencyMode({ isActive, onToggle }) {
       onClick={onToggle}
       title={isActive ? 'Showing only open pharmacies, 24/7 highlighted, auto-zoom enabled' : 'Enable Emergency Mode for instant access'}
     >
-      <span className="emergency-icon">🆘</span>
       <span className="emergency-text">
-        {isActive ? 'Emergency: ON' : 'Emergency Mode'}
+        {isActive ? 'Emergency ON' : 'Emergency'}
       </span>
     </button>
   );

@@ -12,27 +12,28 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Custom icons
+// Professional colored custom icons
 const userIcon = new L.Icon({
   iconUrl: 'data:image/svg+xml;base64,' + btoa(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#3b82f6" width="32" height="32">
-      <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
-      <circle cx="12" cy="12" r="6" fill="white"/>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+      <circle cx="12" cy="12" r="10" fill="#3b82f6" stroke="white" stroke-width="2"/>
+      <circle cx="12" cy="12" r="4" fill="white"/>
     </svg>
   `),
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
 });
 
 const pharmacyIcon = (isOpen) => new L.Icon({
   iconUrl: 'data:image/svg+xml;base64,' + btoa(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${isOpen ? '#10b981' : '#ef4444'}" width="36" height="36">
-      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 9h-4v4h-4v-4H6v-4h4V4h4v4h4v4z"/>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 30" width="24" height="30">
+      <path d="M12 0C7 0 3 4 3 9c0 7 9 21 9 21s9-14 9-21c0-5-4-9-9-9z" fill="${isOpen ? '#2563eb' : '#94a3b8'}" />
+      <path d="M8 9h8M12 5v8" stroke="white" stroke-width="2" stroke-linecap="round"/>
     </svg>
   `),
-  iconSize: [36, 36],
-  iconAnchor: [18, 36],
-  popupAnchor: [0, -36],
+  iconSize: [24, 30],
+  iconAnchor: [12, 30],
+  popupAnchor: [0, -30],
 });
 
 function PharmacyMap({ pharmacies, userLocation, selectedMedicine, emergencyMode }) {
@@ -56,7 +57,7 @@ function PharmacyMap({ pharmacies, userLocation, selectedMedicine, emergencyMode
       key={emergencyMode ? 'emergency' : 'normal'}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       
@@ -64,7 +65,7 @@ function PharmacyMap({ pharmacies, userLocation, selectedMedicine, emergencyMode
       <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
         <Popup>
           <div className="popup-content">
-            <strong>📍 Your Location</strong>
+            <strong>Your Location</strong>
           </div>
         </Popup>
       </Marker>
@@ -72,11 +73,12 @@ function PharmacyMap({ pharmacies, userLocation, selectedMedicine, emergencyMode
       {/* Search radius circle */}
       <Circle
         center={[userLocation.lat, userLocation.lng]}
-        radius={10000} // 10km
+        radius={10000}
         pathOptions={{
           color: '#3b82f6',
           fillColor: '#3b82f6',
-          fillOpacity: 0.1,
+          fillOpacity: 0.05,
+          weight: 1,
         }}
       />
 
@@ -92,18 +94,18 @@ function PharmacyMap({ pharmacies, userLocation, selectedMedicine, emergencyMode
               <h3>{pharmacy.name}</h3>
               <div className="popup-status">
                 <span className={`status-badge ${pharmacy.isOpen ? 'open' : 'closed'}`}>
-                  {pharmacy.isOpen ? '🟢 Open' : '🔴 Closed'}
+                  {pharmacy.isOpen ? 'Open' : 'Closed'}
                 </span>
                 {pharmacy.is24Hours && <span className="badge-24">24/7</span>}
               </div>
-              <p className="popup-address">📍 {pharmacy.address}</p>
-              <p className="popup-distance">🚶 {pharmacy.distance} km away</p>
+              <p className="popup-address">{pharmacy.address}</p>
+              <p className="popup-distance">{pharmacy.distance} km away</p>
               <p className="popup-hours">
-                ⏰ {pharmacy.is24Hours ? 'Open 24 Hours' : `${pharmacy.openTime} - ${pharmacy.closeTime}`}
+                {pharmacy.is24Hours ? '24h' : `${pharmacy.openTime}–${pharmacy.closeTime}`}
               </p>
-              {pharmacy.hasDelivery && <p className="popup-delivery">🚚 Delivery Available</p>}
+              {pharmacy.hasDelivery && <p className="popup-delivery">Delivery available</p>}
               <a href={`tel:${pharmacy.phone}`} className="call-btn">
-                📞 Call Now
+                Call
               </a>
             </div>
           </Popup>

@@ -1,39 +1,45 @@
-/* ── EmergencyMode ── */
-.emergency-toggle {
+/* ── ElderMode Toggle ── */
+.elder-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0.625rem;
-  border: 1px solid #dc2626;
+  border: 1px solid #2563eb;
   border-radius: 0.375rem;
   background: hsl(var(--background));
   cursor: pointer;
   font-family: inherit;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #dc2626;
+  color: #2563eb;
   transition: all 0.15s;
   white-space: nowrap;
 }
 
-.emergency-toggle:hover {
-  background: #fef2f2;
-  border-color: #b91c1c;
-  color: #b91c1c;
+.elder-toggle:hover {
+  background: #eff6ff;
+  border-color: #1d4ed8;
+  color: #1d4ed8;
 }
 
-.emergency-toggle.active {
-  background: #dc2626;
+.elder-toggle.active {
+  background: #2563eb;
   color: #fff;
-  border-color: #dc2626;
+  border-color: #2563eb;
 }
 
-.emergency-icon {
-  font-size: 0.75rem;
+.elder-icon {
+  display: flex;
+  align-items: center;
   line-height: 1;
 }
 
-.emergency-text {
+.elder-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.elder-text {
   font-size: 0.6875rem;
   letter-spacing: 0.01em;
 }

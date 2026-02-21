@@ -1,0 +1,128 @@
+[
+  {
+    "id": "int001",
+    "drug1": "Aspirin",
+    "drug2": "Ibuprofen",
+    "severity": "high",
+    "effect": "Increased risk of gastrointestinal bleeding",
+    "detail": "Both are NSAIDs. Taking together significantly raises the risk of stomach ulcers and bleeding. Aspirin's cardioprotective effect may also be reduced.",
+    "recommendation": "Avoid combination. Use Paracetamol for pain relief instead."
+  },
+  {
+    "id": "int002",
+    "drug1": "Aspirin",
+    "drug2": "Metformin",
+    "severity": "moderate",
+    "effect": "May increase hypoglycemia risk",
+    "detail": "Aspirin in high doses can lower blood sugar levels, potentially enhancing the glucose-lowering effect of Metformin.",
+    "recommendation": "Monitor blood sugar levels closely. Inform your doctor if you take both regularly."
+  },
+  {
+    "id": "int003",
+    "drug1": "Ibuprofen",
+    "drug2": "Metformin",
+    "severity": "moderate",
+    "effect": "Increased risk of kidney damage",
+    "detail": "NSAIDs like Ibuprofen can reduce kidney function, which may cause Metformin to accumulate and increase lactic acidosis risk.",
+    "recommendation": "Use Paracetamol for pain instead. If unavoidable, use the lowest dose for the shortest time."
+  },
+  {
+    "id": "int004",
+    "drug1": "Azithromycin",
+    "drug2": "Atorvastatin",
+    "severity": "high",
+    "effect": "Increased risk of muscle damage (rhabdomyolysis)",
+    "detail": "Azithromycin can inhibit the metabolism of Atorvastatin, leading to elevated statin levels in the blood and increased risk of severe muscle breakdown.",
+    "recommendation": "Notify your doctor. They may temporarily pause the statin during antibiotic treatment."
+  },
+  {
+    "id": "int005",
+    "drug1": "Omeprazole",
+    "drug2": "Metformin",
+    "severity": "low",
+    "effect": "May affect Metformin absorption",
+    "detail": "Omeprazole alters stomach pH which can slightly affect Metformin absorption, though clinical significance is generally low.",
+    "recommendation": "Take at different times of the day. Usually safe but monitor blood sugar."
+  },
+  {
+    "id": "int006",
+    "drug1": "Aspirin",
+    "drug2": "Atorvastatin",
+    "severity": "low",
+    "effect": "Generally safe combination but monitor for muscle pain",
+    "detail": "Often prescribed together for cardiovascular protection. Low interaction risk, but watch for unusual muscle pain or weakness.",
+    "recommendation": "Usually a safe and common combination. Report any muscle pain to your doctor."
+  },
+  {
+    "id": "int007",
+    "drug1": "Cetirizine",
+    "drug2": "Omeprazole",
+    "severity": "low",
+    "effect": "Increased drowsiness possible",
+    "detail": "Omeprazole may slightly increase the bioavailability of Cetirizine, potentially causing more drowsiness.",
+    "recommendation": "Avoid driving if you feel unusually drowsy. Generally safe."
+  },
+  {
+    "id": "int008",
+    "drug1": "Amoxicillin",
+    "drug2": "Metformin",
+    "severity": "low",
+    "effect": "Minor interaction — may affect gut flora",
+    "detail": "Antibiotics can alter gut bacteria that play a role in Metformin's mechanism. Short courses are generally fine.",
+    "recommendation": "Complete the antibiotic course. Monitor blood sugar during treatment."
+  },
+  {
+    "id": "int009",
+    "drug1": "Ibuprofen",
+    "drug2": "Atorvastatin",
+    "severity": "moderate",
+    "effect": "Increased risk of kidney and muscle damage",
+    "detail": "NSAIDs can reduce kidney function. Combined with statins, this may increase the risk of rhabdomyolysis and renal complications.",
+    "recommendation": "Use Paracetamol instead. If you must take Ibuprofen, keep it short-term and low-dose."
+  },
+  {
+    "id": "int010",
+    "drug1": "Paracetamol",
+    "drug2": "Metformin",
+    "severity": "low",
+    "effect": "No significant interaction",
+    "detail": "Paracetamol and Metformin do not significantly interact. Paracetamol is the preferred pain reliever for diabetic patients.",
+    "recommendation": "Safe to use together at recommended doses."
+  },
+  {
+    "id": "int011",
+    "drug1": "Aspirin",
+    "drug2": "Amoxicillin",
+    "severity": "low",
+    "effect": "Minor — may increase Amoxicillin blood levels",
+    "detail": "Aspirin may compete for renal excretion, slightly elevating Amoxicillin levels. Rarely clinically significant.",
+    "recommendation": "Generally safe. Complete the antibiotic course as prescribed."
+  },
+  {
+    "id": "int012",
+    "drug1": "Ibuprofen",
+    "drug2": "Aspirin",
+    "severity": "high",
+    "effect": "Increased risk of gastrointestinal bleeding",
+    "detail": "Both are NSAIDs. Taking together significantly raises the risk of stomach ulcers and bleeding. Aspirin's cardioprotective effect may also be reduced.",
+    "recommendation": "Avoid combination. Use Paracetamol for pain relief instead."
+  },
+  {
+    "id": "int013",
+    "drug1": "Metformin",
+    "drug2": "Insulin",
+    "severity": "moderate",
+    "effect": "Increased risk of hypoglycemia",
+    "detail": "Both lower blood sugar. Using together requires careful dose adjustment to prevent dangerous low blood sugar episodes.",
+    "recommendation": "Often used together under medical supervision. Monitor blood sugar frequently."
+  },
+  {
+    "id": "int014",
+    "drug1": "Azithromycin",
+    "drug2": "Amoxicillin",
+    "severity": "moderate",
+    "effect": "Antagonistic interaction — may reduce effectiveness",
+    "detail": "Macrolide and penicillin antibiotics can antagonize each other. Azithromycin is bacteriostatic while Amoxicillin is bactericidal.",
+    "recommendation": "Do not take both simultaneously. Use one antibiotic as prescribed by your doctor."
+  }
+]
