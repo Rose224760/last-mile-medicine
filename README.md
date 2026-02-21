@@ -44,11 +44,13 @@ People waste **30–60 minutes** during emergencies searching multiple pharmacie
 | Home & Search | Emergency Map | Pharmacy Dashboard |
 |:---:|:---:|:---:|
 | ![Home](<img width="1836" height="888" alt="Screenshot 2026-02-21 083115" src="https://github.com/user-attachments/assets/25255111-5565-4228-b9db-30537fe2a7d0" />
- | ![Emergency](docs/screenshots/emergency-map.png) | ![Dashboard](docs/screenshots/pharmacy-dashboard.png) |
+ | ![Emergency](<img width="805" height="397" alt="image" src="https://github.com/user-attachments/assets/e4a6801b-5e6d-4074-be84-4f09834127c9" />
+) |
 
 | Medicine Safety Check | Drug Interaction | Elder Mode |
 |:---:|:---:|:---:|
-| ![Safety](docs/screenshots/safety-check.png) | ![Interaction](docs/screenshots/drug-interaction.png) | ![Elder](docs/screenshots/elder-mode.png) |
+| ![Safety](<img width="920" height="429" alt="image" src="https://github.com/user-attachments/assets/6ca40b09-9e09-4b5c-a47f-babf83f74b5b" />
+) |  |
 
 ---
 
